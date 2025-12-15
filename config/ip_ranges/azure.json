@@ -1,0 +1,16 @@
+{
+  "provider": "Azure",
+  "download_date": "manual",
+  "note": "Azure requires manual download - this is a placeholder",
+  "ipv4_count": 0,
+  "ipv6_count": 0,
+  "ipv4_ranges": [],
+  "ipv6_ranges": [],
+  "known_domains": [
+    ".cloudapp.net",
+    ".cloudapp.azure.com",
+    ".azurewebsites.net",
+    ".blob.core.windows.net",
+    ".azure-api.net"
+  ]
+}

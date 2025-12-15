@@ -1,0 +1,69 @@
+# Tool-specific configuration
+tools:
+  subfinder:
+    timeout: 600  # 10 minutes
+    threads: 50
+    sources:
+      all: true
+    rate_limit: null
+    options:
+      - "-all"
+      - "-silent"
+
+  dnsx:
+    timeout: 300
+    threads: 100
+    resolvers: []  # Use system resolvers
+    query_types:
+      - "cname"
+      - "a"
+      - "aaaa"
+    options:
+      - "-silent"
+      - "-json"
+
+  httpx:
+    timeout: 10
+    threads: 100
+    follow_redirects: true
+    tech_detect: true
+    cdn_detect: true
+    status_code: true
+    options:
+      - "-silent"
+      - "-json"
+      - "-status-code"
+      - "-tech-detect"
+      - "-cdn"
+      - "-follow-redirects"
+
+  subzy:
+    timeout: 10
+    concurrency: 10
+    https: false
+    verify_ssl: false
+    hide_fails: true
+    options:
+      - "--hide_fails"
+
+  nuclei:
+    timeout: 300
+    threads: 50
+    templates:
+      - "takeovers"
+    severity:
+      - "critical"
+      - "high"
+      - "medium"
+    options:
+      - "-silent"
+      - "-json"
+      - "-tags"
+      - "takeover"
+
+# Binary paths (relative to project root)
+paths:
+  bin_directory: "./bin"
+  output_directory: "./output"
+  logs_directory: "./output/logs"
+  temp_directory: "./output/temp"

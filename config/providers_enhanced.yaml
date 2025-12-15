@@ -1,0 +1,443 @@
+# Enhanced vulnerable service providers with multiple fingerprints and confidence levels
+# Based on can-i-take-over-xyz repository
+
+providers:
+  # ============================================================================
+  # CRITICAL: NXDOMAIN-based detection (Azure, AWS)
+  # ============================================================================
+
+  azure_cloudapp:
+    name: "Azure Cloud App"
+    detection_method: "nxdomain"  # Primary detection via NXDOMAIN
+    patterns:
+      cname:
+        - "\\.cloudapp\\.net$"
+        - "\\.cloudapp\\.azure\\.com$"
+    nxdomain_check: true
+    fingerprints:
+      - pattern: ".*"
+        confidence: "high"
+        requires_nxdomain: true
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#microsoft-azure"
+
+  azure_websites:
+    name: "Azure Web Apps"
+    detection_method: "nxdomain"
+    patterns:
+      cname:
+        - "\\.azurewebsites\\.net$"
+    nxdomain_check: true
+    fingerprints:
+      - pattern: ".*"
+        confidence: "high"
+        requires_nxdomain: true
+    risk_level: "critical"
+
+  azure_blob:
+    name: "Azure Blob Storage"
+    detection_method: "nxdomain"
+    patterns:
+      cname:
+        - "\\.blob\\.core\\.windows\\.net$"
+    nxdomain_check: true
+    fingerprints:
+      - pattern: "The specified resource does not exist"
+        confidence: "high"
+      - pattern: "BlobNotFound"
+        confidence: "high"
+    risk_level: "critical"
+
+  aws_elasticbeanstalk:
+    name: "AWS Elastic Beanstalk"
+    detection_method: "nxdomain"
+    patterns:
+      cname:
+        - "\\.elasticbeanstalk\\.com$"
+    nxdomain_check: true
+    fingerprints:
+      - pattern: ".*"
+        confidence: "high"
+        requires_nxdomain: true
+    risk_level: "critical"
+
+  # ============================================================================
+  # Cloud Storage (HTTP fingerprint-based)
+  # ============================================================================
+
+  s3:
+    name: "Amazon S3"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "s3\\.amazonaws\\.com$"
+        - "s3-website.*\\.amazonaws\\.com$"
+        - "s3.*\\.amazonaws\\.com$"
+    fingerprints:
+      - pattern: "The specified bucket does not exist"
+        confidence: "high"
+        http_status: [404]
+      - pattern: "NoSuchBucket"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#awss3"
+
+  gcs:
+    name: "Google Cloud Storage"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.storage\\.googleapis\\.com$"
+    fingerprints:
+      - pattern: "The specified bucket does not exist"
+        confidence: "high"
+      - pattern: "NoSuchBucket"
+        confidence: "high"
+    risk_level: "high"
+
+  # ============================================================================
+  # Hosting Platforms
+  # ============================================================================
+
+  github_pages:
+    name: "GitHub Pages"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.github\\.io$"
+        - "github\\.io$"
+    fingerprints:
+      - pattern: "There isn't a GitHub Pages site here"
+        confidence: "high"
+        http_status: [404]
+      - pattern: "For root URLs \\(like http://example\\.com/\\) you must provide an index\\.html file"
+        confidence: "medium"
+        http_status: [404]
+    risk_level: "critical"
+    edge_case: true
+    note: "GitHub Pages requires CNAME file in repo - edge case"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#github"
+
+  heroku:
+    name: "Heroku"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.herokuapp\\.com$"
+        - "\\.herokussl\\.com$"
+    fingerprints:
+      - pattern: "No such app"
+        confidence: "high"
+        http_status: [404, 403]
+      - pattern: "There's nothing here, yet"
+        confidence: "medium"
+        http_status: [404]
+    risk_level: "critical"
+    edge_case: true
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#heroku"
+
+  # ============================================================================
+  # E-commerce Platforms
+  # ============================================================================
+
+  shopify:
+    name: "Shopify"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.myshopify\\.com$"
+        - "shops\\.myshopify\\.com$"
+    fingerprints:
+      - pattern: "Sorry, this shop is currently unavailable"
+        confidence: "high"
+        http_status: [404, 403]
+      - pattern: "Only one step left"
+        confidence: "medium"
+        http_status: [404]
+      - pattern: "This shop is currently unavailable"
+        confidence: "high"
+        http_status: [404, 403]
+      - pattern: "Forbidden"
+        confidence: "high"
+        http_status: [403]
+        note: "403 Forbidden with Shopify CNAME indicates unclaimed store"
+      - pattern: ".*"  # Match any content with 403 status
+        confidence: "medium"
+        http_status: [403]
+        note: "Generic 403 on Shopify CNAME - likely unclaimed"
+    risk_level: "critical"
+    edge_case: true
+    note: "Shopify may return 200 for claimed stores"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#shopify"
+
+  # ============================================================================
+  # CDN & Edge
+  # ============================================================================
+
+  fastly:
+    name: "Fastly"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.fastly\\.net$"
+        - "\\.fastlylb\\.net$"
+    fingerprints:
+      - pattern: "Fastly error: unknown domain"
+        confidence: "high"
+        http_status: [404]
+      - pattern: "Please check that this domain has been added to a service"
+        confidence: "medium"
+    risk_level: "medium"
+    vulnerable: false
+    note: "Generally not vulnerable - included for awareness"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#fastly"
+
+  cloudfront:
+    name: "AWS CloudFront"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.cloudfront\\.net$"
+    fingerprints:
+      - pattern: "ViewerCertificateException"
+        confidence: "medium"
+      - pattern: "ERROR: The request could not be satisfied"
+        confidence: "low"
+    risk_level: "medium"
+    vulnerable: false
+    note: "Generally not vulnerable due to certificate verification"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#cloudfront"
+
+  # ============================================================================
+  # Marketing & Analytics
+  # ============================================================================
+
+  unbounce:
+    name: "Unbounce"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.unbounce\\.com$"
+    fingerprints:
+      - pattern: "The requested URL was not found on this server"
+        confidence: "medium"
+        http_status: [404]
+    risk_level: "medium"
+    vulnerable: false
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#unbounce"
+
+  campaign_monitor:
+    name: "Campaign Monitor"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.createsend\\.com$"
+    fingerprints:
+      - pattern: "Trying to access your account\\?"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#campaign-monitor"
+
+  # ============================================================================
+  # Help Desk & Support
+  # ============================================================================
+
+  zendesk:
+    name: "Zendesk"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.zendesk\\.com$"
+    fingerprints:
+      - pattern: "Help Center Closed"
+        confidence: "high"
+      - pattern: "This help center no longer exists"
+        confidence: "high"
+    risk_level: "medium"
+    vulnerable: false
+    note: "Zendesk has security measures to prevent takeovers"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#zendesk"
+
+  helpjuice:
+    name: "Help Juice"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.helpjuice\\.com$"
+    fingerprints:
+      - pattern: "We could not find what you're looking for"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#help-juice"
+
+  helpscout:
+    name: "Help Scout"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.helpscoutdocs\\.com$"
+    fingerprints:
+      - pattern: "No settings were found for this company"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#help-scout"
+
+  # ============================================================================
+  # CMS & Website Builders
+  # ============================================================================
+
+  tumblr:
+    name: "Tumblr"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.tumblr\\.com$"
+    fingerprints:
+      - pattern: "Whatever you were looking for doesn't currently exist at this address"
+        confidence: "medium"
+        http_status: [404]
+    risk_level: "medium"
+    edge_case: true
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#tumblr"
+
+  wordpress:
+    name: "WordPress.com"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.wordpress\\.com$"
+    fingerprints:
+      - pattern: "Do you want to register .*\\.wordpress\\.com\\?"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#wordpress"
+
+  ghost:
+    name: "Ghost"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.ghost\\.io$"
+    fingerprints:
+      - pattern: "The thing you were looking for is no longer here"
+        confidence: "high"
+      - pattern: "Site unavailable"
+        confidence: "medium"
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#ghost"
+
+  webflow:
+    name: "Webflow"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.webflow\\.io$"
+    fingerprints:
+      - pattern: "The page you are looking for doesn't exist or has been moved"
+        confidence: "medium"
+        http_status: [404]
+    risk_level: "medium"
+    edge_case: true
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#webflow"
+
+  # ============================================================================
+  # Development & Hosting
+  # ============================================================================
+
+  surge:
+    name: "Surge.sh"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.surge\\.sh$"
+        - "na-west1\\.surge\\.sh$"
+    fingerprints:
+      - pattern: "project not found"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#surgesh"
+
+  netlify:
+    name: "Netlify"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.netlify\\.(com|app)$"
+    fingerprints:
+      - pattern: "Not Found - Request ID:"
+        confidence: "medium"
+        http_status: [404]
+      - pattern: "Site Not Found"
+        confidence: "medium"
+    risk_level: "medium"
+    edge_case: true
+    note: "Netlify has domain verification"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#netlify"
+
+  vercel:
+    name: "Vercel"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.vercel\\.app$"
+        - "\\.now\\.sh$"
+    fingerprints:
+      - pattern: "DEPLOYMENT_NOT_FOUND"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "medium"
+    edge_case: true
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#vercel"
+
+  # ============================================================================
+  # Documentation & Knowledge Base
+  # ============================================================================
+
+  readme:
+    name: "Readme.io"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.readme\\.io$"
+    fingerprints:
+      - pattern: "The creators of this project are still working on making everything perfect"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#readmeio"
+
+  # ============================================================================
+  # Other Services
+  # ============================================================================
+
+  bitbucket:
+    name: "Bitbucket"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.bitbucket\\.io$"
+    fingerprints:
+      - pattern: "Repository not found"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#bitbucket"
+
+  pantheon:
+    name: "Pantheon"
+    detection_method: "fingerprint"
+    patterns:
+      cname:
+        - "\\.pantheonsite\\.io$"
+    fingerprints:
+      - pattern: "404 error unknown site!"
+        confidence: "high"
+        http_status: [404]
+    risk_level: "critical"
+    reference: "https://github.com/EdOverflow/can-i-take-over-xyz#pantheon"

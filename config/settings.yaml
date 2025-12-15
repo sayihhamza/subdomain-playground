@@ -1,0 +1,56 @@
+# General settings
+general:
+  threads: 50
+  timeout: 10
+  rate_limit: 100
+  max_retries: 3
+  retry_delay: 2
+
+# Paths
+paths:
+  bin_dir: "./bin"
+  output_dir: "./output"
+  log_dir: "./output/logs"
+  temp_dir: "./output/temp"
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+  file_logging: true
+  console_logging: true
+
+# Tool enablement
+tools:
+  subfinder:
+    enabled: true
+    timeout: 600
+  dnsx:
+    enabled: true
+    resolvers: []
+  httpx:
+    enabled: true
+    follow_redirects: true
+    tech_detect: true
+  subzy:
+    enabled: true
+    timeout: 10
+  nuclei:
+    enabled: true
+    templates: "takeovers"
+
+# Pipeline options
+pipeline:
+  enable_http_validation: true
+  enable_wildcard_check: true
+  enable_nuclei_verification: true
+  enable_deduplication: true
+
+# Output
+output:
+  format: "json"
+  pretty_print: true
+  include_metadata: true
+  include_statistics: true
+  save_intermediate: false

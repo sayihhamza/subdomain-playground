@@ -1,0 +1,215 @@
+# Vulnerable service providers and their fingerprints
+providers:
+  # Cloud Storage
+  s3:
+    name: "Amazon S3"
+    patterns:
+      cname:
+        - "s3\\.amazonaws\\.com$"
+        - "s3-website.*\\.amazonaws\\.com$"
+        - "s3.*\\.amazonaws\\.com$"
+    fingerprints:
+      - "NoSuchBucket"
+      - "The specified bucket does not exist"
+    risk_level: "high"
+
+  azure_blob:
+    name: "Azure Blob Storage"
+    patterns:
+      cname:
+        - "\\.blob\\.core\\.windows\\.net$"
+    fingerprints:
+      - "The specified resource does not exist"
+      - "BlobNotFound"
+    risk_level: "high"
+
+  gcs:
+    name: "Google Cloud Storage"
+    patterns:
+      cname:
+        - "\\.storage\\.googleapis\\.com$"
+    fingerprints:
+      - "NoSuchBucket"
+      - "The specified bucket does not exist"
+    risk_level: "high"
+
+  # Hosting Platforms
+  github_pages:
+    name: "GitHub Pages"
+    patterns:
+      cname:
+        - "\\.github\\.io$"
+        - "github\\.io$"
+    fingerprints:
+      - "There isn't a GitHub Pages site here"
+      - "404 Not Found"
+    risk_level: "critical"
+
+  heroku:
+    name: "Heroku"
+    patterns:
+      cname:
+        - "\\.herokuapp\\.com$"
+        - "herokussl\\.com$"
+    fingerprints:
+      - "No such app"
+      - "There's nothing here, yet"
+    risk_level: "high"
+
+  pantheon:
+    name: "Pantheon"
+    patterns:
+      cname:
+        - "\\.pantheonsite\\.io$"
+    fingerprints:
+      - "404 error unknown site"
+    risk_level: "high"
+
+  # E-commerce
+  shopify:
+    name: "Shopify"
+    patterns:
+      cname:
+        - "\\.myshopify\\.com$"
+        - "shops\\.myshopify\\.com$"
+    fingerprints:
+      - "Sorry, this shop is currently unavailable"
+      - "Only one step left"
+    risk_level: "critical"
+
+  # CDN/Edge
+  fastly:
+    name: "Fastly"
+    patterns:
+      cname:
+        - "\\.fastly\\.net$"
+        - "fastly\\.net$"
+    fingerprints:
+      - "Fastly error: unknown domain"
+    risk_level: "medium"
+
+  cloudfront:
+    name: "CloudFront"
+    patterns:
+      cname:
+        - "\\.cloudfront\\.net$"
+    fingerprints:
+      - "Bad request"
+      - "ERROR: The request could not be satisfied"
+    risk_level: "medium"
+
+  # Marketing/Landing Pages
+  unbounce:
+    name: "Unbounce"
+    patterns:
+      cname:
+        - "\\.unbouncepages\\.com$"
+    fingerprints:
+      - "The requested URL was not found"
+      - "This page is currently unavailable"
+    risk_level: "high"
+
+  campaignmonitor:
+    name: "Campaign Monitor"
+    patterns:
+      cname:
+        - "\\.createsend\\.com$"
+    fingerprints:
+      - "Double check the URL"
+    risk_level: "medium"
+
+  # Help Desk
+  zendesk:
+    name: "Zendesk"
+    patterns:
+      cname:
+        - "\\.zendesk\\.com$"
+    fingerprints:
+      - "Help Center Closed"
+      - "This help center no longer exists"
+    risk_level: "high"
+
+  # CMS/Website Builders
+  webflow:
+    name: "Webflow"
+    patterns:
+      cname:
+        - "\\.webflow\\.io$"
+    fingerprints:
+      - "The page you are looking for doesn't exist"
+    risk_level: "high"
+
+  tumblr:
+    name: "Tumblr"
+    patterns:
+      cname:
+        - "\\.tumblr\\.com$"
+    fingerprints:
+      - "Whatever you were looking for doesn't currently exist"
+    risk_level: "medium"
+
+  wordpress:
+    name: "WordPress.com"
+    patterns:
+      cname:
+        - "\\.wordpress\\.com$"
+    fingerprints:
+      - "Do you want to register"
+    risk_level: "medium"
+
+  ghost:
+    name: "Ghost"
+    patterns:
+      cname:
+        - "\\.ghost\\.io$"
+    fingerprints:
+      - "The thing you were looking for is no longer here"
+    risk_level: "medium"
+
+  # Hosting Services
+  bitbucket:
+    name: "Bitbucket"
+    patterns:
+      cname:
+        - "\\.bitbucket\\.io$"
+    fingerprints:
+      - "Repository not found"
+    risk_level: "high"
+
+  surge:
+    name: "Surge.sh"
+    patterns:
+      cname:
+        - "\\.surge\\.sh$"
+    fingerprints:
+      - "project not found"
+    risk_level: "high"
+
+  # Analytics/Marketing
+  statuspage:
+    name: "StatusPage"
+    patterns:
+      cname:
+        - "\\.statuspage\\.io$"
+    fingerprints:
+      - "You are being"
+      - "redirected"
+    risk_level: "medium"
+
+  uservoice:
+    name: "UserVoice"
+    patterns:
+      cname:
+        - "\\.uservoice\\.com$"
+    fingerprints:
+      - "This UserVoice subdomain is currently available"
+    risk_level: "medium"
+
+# Additional patterns for wildcard detection
+wildcard_indicators:
+  - "*"
+  - "*.github.io"
+  - "*.herokuapp.com"
+  - "*.s3.amazonaws.com"
+  - "*.webflow.io"
+  - "*.surge.sh"
