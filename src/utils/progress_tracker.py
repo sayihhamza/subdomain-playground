@@ -45,9 +45,9 @@ class ProgressTracker:
         print(f"Concurrent Workers: {self.workers}")
         print(f"Estimated Time   : {estimated_duration}")
         print(f"Estimated Done   : {estimated_completion.strftime('%H:%M:%S')}")
-        print("=" * 140)
-        print(f"{'SUBDOMAIN':<50} {'STATUS':<10} {'PROVIDER':<15} {'CNAME CHAIN':<35} {'DNS INFO':<30}")
-        print("=" * 140)
+        print("=" * 200)
+        print(f"{'SUBDOMAIN':<40} {'STATUS':<8} {'PROVIDER':<12} {'CNAME':<30} {'EVIDENCE':<50} {'MESSAGE':<60}")
+        print("=" * 200)
 
     def update(self, subdomain: str, status: str = "✓", provider: Optional[str] = None,
                cname: Optional[str] = None, http_status: Optional[int] = None,
@@ -76,53 +76,47 @@ class ProgressTracker:
             self.completed += 1
 
             # Truncate long values
-            subdomain_display = subdomain[:48] + ".." if len(subdomain) > 50 else subdomain
-            provider_display = provider or "-"
+            subdomain_display = subdomain[:38] + ".." if len(subdomain) > 40 else subdomain
+            provider_display = (provider or "-")[:12]
 
-            # CNAME Chain column - show chain if available
+            # CNAME - show first CNAME or chain indicator
             if cname_chain and len(cname_chain) > 1:
-                # Show chain with arrow notation
-                chain_str = " → ".join(cname_chain[:2])  # Show first 2 hops
-                if len(cname_chain) > 2:
-                    chain_str += f" → ...({len(cname_chain)} hops)"
-                cname_display = chain_str[:33] + ".." if len(chain_str) > 35 else chain_str
+                cname_display = f"{cname_chain[0][:25]}.. ({len(cname_chain)} hops)"
             elif cname:
-                cname_display = cname[:33] + ".." if len(cname) > 35 else cname
+                cname_display = cname[:28] + ".." if len(cname) > 30 else cname
             else:
                 cname_display = "-"
 
             # Status column shows HTTP status code or vulnerability
             if vulnerable:
-                status_display = "🔴 VULN"
+                status_display = "🔴VULN"
             elif http_status:
                 status_display = str(http_status)
             else:
                 status_display = "-"
 
-            # DNS INFO column - show detailed DNS information
-            dns_info_parts = []
-            if dns_response_code and dns_response_code != 'NOERROR':
-                dns_info_parts.append(f"DNS:{dns_response_code}")
-            if a_records:
-                dns_info_parts.append(f"A:{len(a_records)}IPs")
-            if cname_chain_count > 1:
-                dns_info_parts.append(f"Chain:{cname_chain_count}")
-            if final_cname_target and final_cname_target != cname:
-                dns_info_parts.append(f"→{final_cname_target[:15]}")
-
-            dns_info_display = " | ".join(dns_info_parts) if dns_info_parts else "-"
-            dns_info_display = dns_info_display[:28] + ".." if len(dns_info_display) > 30 else dns_info_display
-
-            # Print progress line
-            print(f"{subdomain_display:<50} {status_display:<10} {provider_display:<15} {cname_display:<35} {dns_info_display:<30}")
-
-            # Show takeover evidence if present (important!)
+            # Evidence column - show takeover categorization
             if takeover_evidence:
-                print(f"    └─ EVIDENCE: {takeover_evidence}")
+                # Extract key part (e.g., "DEFINITE TAKEOVER", "FALSE POSITIVE")
+                if "DEFINITE TAKEOVER" in takeover_evidence:
+                    evidence_display = "🔴 DEFINITE TAKEOVER"
+                elif "HIGH PROBABILITY" in takeover_evidence:
+                    evidence_display = "⚠️ HIGH PROBABILITY"
+                elif "FALSE POSITIVE" in takeover_evidence:
+                    evidence_display = "❌ FALSE POSITIVE"
+                else:
+                    evidence_display = takeover_evidence[:48] + ".." if len(takeover_evidence) > 50 else takeover_evidence
+            else:
+                evidence_display = "-"
+
+            # Message column - show error message from page
             if http_body_snippet and http_body_snippet != "[No error message found]":
-                # Truncate snippet for display
-                snippet_display = http_body_snippet[:120] + "..." if len(http_body_snippet) > 120 else http_body_snippet
-                print(f"    └─ MESSAGE: {snippet_display}")
+                message_display = http_body_snippet[:58] + ".." if len(http_body_snippet) > 60 else http_body_snippet
+            else:
+                message_display = "-"
+
+            # Print progress line with all columns
+            print(f"{subdomain_display:<40} {status_display:<8} {provider_display:<12} {cname_display:<30} {evidence_display:<50} {message_display:<60}")
 
             # Show progress every 10 domains or at completion
             if self.completed % 10 == 0 or self.completed == self.total_domains:
@@ -143,9 +137,9 @@ class ProgressTracker:
     def finish(self):
         """Print completion summary"""
         elapsed = time.time() - self.start_time
-        print("\n" + "=" * 140)
+        print("\n" + "=" * 200)
         print(f"✅ SCAN COMPLETE - {self.completed} subdomains processed in {int(elapsed//60)}m {int(elapsed%60)}s")
-        print("=" * 140 + "\n")
+        print("=" * 200 + "\n")
 
 
 class SubdomainProgressTracker:
