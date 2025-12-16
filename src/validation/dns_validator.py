@@ -65,26 +65,16 @@ class DNSValidator:
 
         try:
             # Run dnsx to resolve DNS records with custom resolvers
-            # Using comprehensive flags for detailed DNS information
+            # Using only essential flags that work with latest dnsx
             cmd = [
                 str(self.dnsx_path),
                 '-l', temp_file,
                 '-json',
                 '-cname',        # CNAME records
                 '-a',            # A records
-                '-aaaa',         # AAAA records
-                '-ns',           # NS records
-                '-mx',           # MX records
-                '-txt',          # TXT records
-                '-soa',          # SOA records
                 '-resp',         # Include full DNS response
-                '-trace',        # Trace CNAME chain
-                '-rc',           # Response code
-                '-cdn',          # CDN detection
-                '-rcode',        # Response code details
                 '-retry', '2',
-                '-timeout', '5',
-                '-r', '8.8.8.8,1.1.1.1,208.67.222.222,9.9.9.9',  # Google, Cloudflare, OpenDNS, Quad9
+                '-r', '8.8.8.8,1.1.1.1',  # Google, Cloudflare
                 '-silent'
             ]
 
