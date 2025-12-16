@@ -139,6 +139,12 @@ For more information, visit: https://github.com/yourusername/subdomain-scanner
         help='Only show subdomains with CNAME records (filters out direct A records)'
     )
     parser.add_argument(
+        '--require-cname-contains',
+        type=str,
+        metavar='PATTERN',
+        help='Only show subdomains where CNAME chain contains pattern (e.g., "shopify", "myshopify.com"). Checks entire CNAME chain, case-insensitive.'
+    )
+    parser.add_argument(
         '--shopify-takeover-only',
         action='store_true',
         help='Only show high-priority Shopify takeover candidates (CNAME to myshopify.com + 403/404)'
@@ -435,6 +441,7 @@ def main():
                 mode=args.mode,
                 filter_status=filter_status_codes,
                 require_cname=args.require_cname,
+                require_cname_contains=args.require_cname_contains,
                 shopify_takeover_only=args.shopify_takeover_only
             )
 

@@ -363,7 +363,8 @@ class OrchestratorV2:
         return results
 
     def scan_domains(self, domains: List[str], workers: int = 5, provider_filter: Optional[str] = None, mode: str = 'quick',
-                    filter_status: Optional[List[int]] = None, require_cname: bool = False, shopify_takeover_only: bool = False) -> List[Dict]:
+                    filter_status: Optional[List[int]] = None, require_cname: bool = False, require_cname_contains: Optional[str] = None,
+                    shopify_takeover_only: bool = False) -> List[Dict]:
         """
         Scan multiple domains concurrently
 
@@ -373,6 +374,7 @@ class OrchestratorV2:
             provider_filter: Optional provider to filter for (e.g., 'Shopify', 'AWS')
             filter_status: Only show subdomains with these HTTP status codes
             require_cname: Only show subdomains with CNAME records
+            require_cname_contains: Only show subdomains where CNAME chain contains this pattern (case-insensitive)
             shopify_takeover_only: Only show Shopify takeover candidates
 
         Returns:
@@ -432,6 +434,27 @@ class OrchestratorV2:
                                 if not sub.get('cname'):
                                     continue
 
+                            if require_cname_contains:
+                                # Check if ANY CNAME in the chain contains the pattern (case-insensitive)
+                                cname_chain = sub.get('cname_chain', [])
+                                pattern_lower = require_cname_contains.lower()
+
+                                # Check all CNAMEs in the chain
+                                found_pattern = False
+                                if cname_chain:
+                                    for cname_hop in cname_chain:
+                                        if pattern_lower in cname_hop.lower():
+                                            found_pattern = True
+                                            break
+
+                                # Also check the primary cname field as fallback
+                                if not found_pattern and sub.get('cname'):
+                                    if pattern_lower in sub.get('cname').lower():
+                                        found_pattern = True
+
+                                if not found_pattern:
+                                    continue  # Skip this subdomain - doesn't contain pattern
+
                             # Passed all filters - show it with enhanced DNS info
                             tracker.update(
                                 subdomain=sub.get('subdomain', domain),
@@ -449,7 +472,7 @@ class OrchestratorV2:
                     else:
                         # No subdomains found - only show if no filters are active
                         # (Don't clutter output when using specific filters like --shopify-takeover-only)
-                        if not (shopify_takeover_only or filter_status or require_cname):
+                        if not (shopify_takeover_only or filter_status or require_cname or require_cname_contains):
                             tracker.update(
                                 subdomain=domain,
                                 provider=None,
