@@ -73,6 +73,12 @@ class WildcardDetector:
         if removed > 0:
             self.logger.info(f"Filtered {removed} wildcard matches ({removed/len(subdomains)*100:.1f}%)")
 
+        # Safety valve: if everything was filtered, return original list to avoid false negatives
+        # This can happen with noisy resolvers or CDN edge cases in constrained environments (e.g., Kaggle)
+        if not filtered and subdomains:
+            self.logger.warning("Wildcard filter removed all subdomains - returning unfiltered list to avoid false negatives")
+            return subdomains
+
         return filtered
 
     def _detect_wildcard(self, domain: str) -> Set[str]:

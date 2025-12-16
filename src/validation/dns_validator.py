@@ -49,6 +49,14 @@ class DNSValidator:
 
         self.logger.info(f"Validating DNS for {len(subdomains)} subdomains")
 
+        # If dnsx binary is missing or not executable, go straight to fallback
+        if not self.dnsx_path or not Path(self.dnsx_path).exists():
+            self.logger.warning("dnsx binary not found, using fallback resolver")
+            return self._fallback_validation(subdomains)
+        if not Path(self.dnsx_path).stat().st_mode & 0o111:
+            self.logger.warning("dnsx binary is not executable, using fallback resolver")
+            return self._fallback_validation(subdomains)
+
         # Create temporary file with subdomain list
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
             for subdomain in subdomains:
