@@ -42,6 +42,8 @@ class Subdomain:
     http_status: Optional[int] = None
     http_title: Optional[str] = None
     http_server: Optional[str] = None
+    http_body_snippet: Optional[str] = None  # Extracted error message from body
+    takeover_evidence: Optional[str] = None  # Evidence of takeover vulnerability from body content
     technologies: List[str] = field(default_factory=list)
     cdn: Optional[str] = None
 

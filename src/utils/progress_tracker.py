@@ -54,7 +54,8 @@ class ProgressTracker:
                fingerprint: Optional[str] = None, vulnerable: bool = False,
                cname_chain: Optional[list] = None, cname_chain_count: int = 0,
                dns_response_code: Optional[str] = None, a_records: Optional[list] = None,
-               final_cname_target: Optional[str] = None):
+               final_cname_target: Optional[str] = None, http_body_snippet: Optional[str] = None,
+               takeover_evidence: Optional[str] = None):
         """
         Update progress with a completed subdomain
 
@@ -114,6 +115,14 @@ class ProgressTracker:
 
             # Print progress line
             print(f"{subdomain_display:<50} {status_display:<10} {provider_display:<15} {cname_display:<35} {dns_info_display:<30}")
+
+            # Show takeover evidence if present (important!)
+            if takeover_evidence:
+                print(f"    └─ EVIDENCE: {takeover_evidence}")
+            if http_body_snippet and http_body_snippet != "[No error message found]":
+                # Truncate snippet for display
+                snippet_display = http_body_snippet[:120] + "..." if len(http_body_snippet) > 120 else http_body_snippet
+                print(f"    └─ MESSAGE: {snippet_display}")
 
             # Show progress every 10 domains or at completion
             if self.completed % 10 == 0 or self.completed == self.total_domains:

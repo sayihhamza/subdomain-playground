@@ -49,7 +49,7 @@ class HTTPValidator(PipelineStage):
             temp_file = f.name
 
         try:
-            # Build httpx command
+            # Build httpx command with body extraction for takeover detection
             args = [
                 '-l', temp_file,
                 '-json',            # JSON output
@@ -58,6 +58,7 @@ class HTTPValidator(PipelineStage):
                 '-cdn',             # Detect CDN
                 '-title',           # Get page title
                 '-server',          # Get server header
+                '-body',            # Extract response body (for error message detection)
                 '-follow-redirects',
                 '-silent',
                 '-t', str(self.threads),

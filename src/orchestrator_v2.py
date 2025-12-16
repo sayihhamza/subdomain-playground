@@ -455,7 +455,7 @@ class OrchestratorV2:
                                 if not found_pattern:
                                     continue  # Skip this subdomain - doesn't contain pattern
 
-                            # Passed all filters - show it with enhanced DNS info
+                            # Passed all filters - show it with enhanced DNS info and body content
                             tracker.update(
                                 subdomain=sub.get('subdomain', domain),
                                 provider=sub.get('provider'),
@@ -467,7 +467,9 @@ class OrchestratorV2:
                                 cname_chain_count=sub.get('cname_chain_count', 0),
                                 dns_response_code=sub.get('dns_response_code'),
                                 a_records=sub.get('a_records', []),
-                                final_cname_target=sub.get('final_cname_target')
+                                final_cname_target=sub.get('final_cname_target'),
+                                http_body_snippet=sub.get('http_body_snippet'),
+                                takeover_evidence=sub.get('takeover_evidence')
                             )
                     else:
                         # No subdomains found - only show if no filters are active
