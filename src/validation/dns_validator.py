@@ -87,11 +87,15 @@ class DNSValidator:
 
             if result.returncode == 0 and result.stdout:
                 # Parse dnsx JSON output
+                lines_count = len([l for l in result.stdout.strip().split('\n') if l])
+                self.logger.info(f"dnsx returned {lines_count} lines of output")
                 validated = self._parse_dnsx_output(result.stdout, subdomains)
-                self.logger.info(f"Successfully validated {len(validated)} subdomains")
+                self.logger.info(f"Successfully validated {len(validated)}/{len(subdomains)} subdomains")
+                if len(validated) == 0 and lines_count > 0:
+                    self.logger.warning(f"dnsx returned {lines_count} lines but parser found 0 matches!")
                 return validated
             else:
-                self.logger.warning("dnsx validation failed, using fallback")
+                self.logger.warning(f"dnsx validation failed (rc={result.returncode}, stdout={len(result.stdout) if result.stdout else 0} bytes), using fallback")
                 if self.use_dnspython_fallback:
                     return self._fallback_validation(subdomains)
                 return []
