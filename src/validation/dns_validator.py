@@ -135,6 +135,10 @@ class DNSValidator:
                 data = json.loads(line)
                 hostname = data.get('host', '')
 
+                # Debug: Log what we're trying to match
+                if hostname not in subdomain_map:
+                    self.logger.debug(f"Hostname '{hostname}' not in subdomain_map (have {len(subdomain_map)} entries)")
+
                 if hostname in subdomain_map:
                     subdomain = subdomain_map[hostname]
 
