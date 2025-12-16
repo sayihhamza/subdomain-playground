@@ -323,48 +323,63 @@ class MultiToolEnumerator:
         Returns:
             Set of permuted subdomains
         """
-        # Create comprehensive patterns for cloud services and common subdomains
+        # Comprehensive patterns optimized for Shopify subdomain takeover detection
+        # Total: 100+ patterns for maximum coverage
         patterns = [
             # Development & Staging
             'dev', 'staging', 'stage', 'prod', 'production', 'uat', 'qa', 'test', 'testing',
-            'demo', 'sandbox', 'lab', 'labs', 'preview', 'temp', 'tmp',
+            'demo', 'sandbox', 'lab', 'labs', 'preview', 'temp', 'tmp', 'dev2', 'staging2',
 
             # API & Services
-            'api', 'api-v1', 'api-v2', 'rest', 'graphql', 'ws', 'websocket', 'grpc',
-            'service', 'services', 'microservice', 'backend', 'gateway',
+            'api', 'api-v1', 'api-v2', 'api-v3', 'rest', 'graphql', 'ws', 'websocket', 'grpc',
+            'service', 'services', 'microservice', 'backend', 'gateway', 'api-gateway',
 
             # Admin & Management
             'admin', 'administrator', 'management', 'console', 'dashboard', 'panel',
-            'control', 'manager', 'portal',
+            'control', 'manager', 'portal', 'cpanel', 'admin-panel',
 
-            # E-commerce
+            # E-commerce (Shopify-specific)
             'shop', 'store', 'checkout', 'cart', 'payment', 'payments', 'billing',
-            'order', 'orders', 'merchant', 'pos',
+            'order', 'orders', 'merchant', 'pos', 'retail', 'ecommerce', 'catalog',
+            'products', 'inventory', 'fulfillment', 'shipping', 'returns',
 
             # Content & Media
             'cdn', 'static', 'assets', 'media', 'images', 'img', 'files', 'download',
-            'uploads', 'content', 'resources',
+            'uploads', 'content', 'resources', 'video', 'videos', 'photo', 'photos',
 
             # Applications
-            'app', 'mobile', 'ios', 'android', 'web', 'webapp', 'client',
+            'app', 'mobile', 'ios', 'android', 'web', 'webapp', 'client', 'app2',
 
             # Infrastructure
             'vpn', 'mail', 'email', 'smtp', 'pop', 'imap', 'ftp', 'sftp',
-            'ssh', 'remote', 'proxy', 'load-balancer', 'lb',
+            'ssh', 'remote', 'proxy', 'load-balancer', 'lb', 'vpn2',
 
             # Monitoring & Tools
             'monitoring', 'metrics', 'logs', 'analytics', 'stats', 'status',
-            'health', 'grafana', 'kibana', 'prometheus',
+            'health', 'grafana', 'kibana', 'prometheus', 'datadog',
 
             # Database & Cache
-            'db', 'database', 'sql', 'mysql', 'postgres', 'mongodb', 'redis',
-            'cache', 'memcache',
+            'db', 'database', 'sql', 'mysql', 'postgres', 'postgresql', 'mongodb', 'redis',
+            'cache', 'memcache', 'memcached', 'db2',
 
             # Documentation & Support
             'docs', 'documentation', 'help', 'support', 'wiki', 'kb', 'knowledgebase',
+            'faq', 'helpdesk', 'ticket', 'tickets',
 
             # Security & Auth
-            'auth', 'login', 'sso', 'oauth', 'security', 'secure'
+            'auth', 'login', 'sso', 'oauth', 'security', 'secure', 'identity', 'saml',
+
+            # Geographic (common for CDN/regional deployments)
+            'us', 'eu', 'uk', 'ca', 'au', 'asia', 'apac', 'emea', 'na',
+            'us-east', 'us-west', 'eu-west', 'eu-central', 'ap-southeast',
+
+            # Cloud-specific
+            'aws', 'azure', 'gcp', 'cloud', 'k8s', 'kubernetes', 'docker',
+            's3', 'blob', 'storage', 'bucket',
+
+            # Marketing & Customer-facing
+            'www', 'www2', 'blog', 'news', 'marketing', 'promo', 'campaign',
+            'landing', 'lp', 'newsletter', 'email-campaigns'
         ]
 
         cmd = [
