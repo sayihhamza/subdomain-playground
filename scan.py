@@ -94,6 +94,23 @@ For more information, visit: https://github.com/yourusername/subdomain-scanner
         metavar='DOMAIN',
         help='Scan a single domain directly (e.g., gymshark.com)'
     )
+    input_group.add_argument(
+        '--google-sheet',
+        metavar='URL',
+        help='Read domains from a public Google Sheet URL'
+    )
+
+    # Google Sheets options (used with --google-sheet)
+    parser.add_argument(
+        '--sheet-name',
+        default='domains',
+        help='Name of the Google Sheet tab to read from (default: domains)'
+    )
+    parser.add_argument(
+        '--sheet-column',
+        default='Website',
+        help='Column name containing domains (default: Website)'
+    )
 
     # Output options
     parser.add_argument(
@@ -407,6 +424,45 @@ def main():
             return 1
 
     # Get domains to scan
+    elif args.google_sheet:
+        # Read domains from Google Sheet
+        from src.collection.google_sheets import GoogleSheetsReader
+
+        if not args.quiet:
+            print(f"\n📊 Reading domains from Google Sheet...")
+            print(f"Sheet name: {args.sheet_name}")
+            print(f"Column: {args.sheet_column}")
+
+        try:
+            sheets_reader = GoogleSheetsReader()
+            domains = sheets_reader.read_domains_from_sheet(
+                sheet_url=args.google_sheet,
+                sheet_name=args.sheet_name,
+                column_name=args.sheet_column
+            )
+
+            if not args.quiet:
+                print(f"✓ Loaded {len(domains)} domains from Google Sheet")
+                if domains:
+                    print(f"\nFirst 5 domains:")
+                    for domain in domains[:5]:
+                        print(f"  - {domain}")
+                    if len(domains) > 5:
+                        print(f"  ... and {len(domains) - 5} more")
+
+            # Apply limit if specified
+            if args.limit and len(domains) > args.limit:
+                domains = domains[:args.limit]
+                if not args.quiet:
+                    print(f"\n⚠️  Limited to first {args.limit} domains")
+
+        except Exception as e:
+            print(f"Error reading Google Sheet: {str(e)}", file=sys.stderr)
+            if args.verbose:
+                import traceback
+                traceback.print_exc()
+            return 1
+
     elif args.scan_single:
         # Direct single domain scan (no collection needed)
         domains = [args.scan_single]
