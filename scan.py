@@ -45,6 +45,81 @@ def setup_logging(verbose: bool = False):
     )
 
 
+def parse_status_code_patterns(pattern_str: str) -> list:
+    """
+    Parse status code patterns with wildcard support
+
+    Args:
+        pattern_str: Comma-separated status codes or patterns (e.g., "403,404,4*,5*")
+
+    Returns:
+        List of integer status codes
+
+    Examples:
+        "403,404,409" -> [403, 404, 409]
+        "4*" -> [400, 401, 402, 403, ..., 499]
+        "4*,500" -> [400-499, 500]
+        "40*" -> [400, 401, 402, ..., 409]
+    """
+    status_codes = set()
+
+    for pattern in pattern_str.split(','):
+        pattern = pattern.strip()
+
+        if not pattern:
+            continue
+
+        # Check for wildcard pattern
+        if '*' in pattern:
+            # Extract the prefix (everything before *)
+            prefix = pattern.replace('*', '')
+
+            if not prefix:
+                # Just "*" - invalid
+                continue
+
+            # Validate prefix is numeric
+            if not prefix.isdigit():
+                continue
+
+            # Generate range based on prefix length
+            prefix_len = len(prefix)
+
+            if prefix_len == 1:
+                # Single digit prefix (e.g., "4*" -> 400-499)
+                start = int(prefix) * 100
+                end = start + 100
+            elif prefix_len == 2:
+                # Two digit prefix (e.g., "40*" -> 400-409)
+                start = int(prefix) * 10
+                end = start + 10
+            else:
+                # Three digit prefix (e.g., "40*" is actually just 400-409)
+                # For safety, just add the specific code
+                try:
+                    status_codes.add(int(prefix))
+                except ValueError:
+                    pass
+                continue
+
+            # Add all codes in range
+            for code in range(start, end):
+                # Only add valid HTTP status codes (100-599)
+                if 100 <= code <= 599:
+                    status_codes.add(code)
+        else:
+            # Specific status code
+            try:
+                code = int(pattern)
+                if 100 <= code <= 599:
+                    status_codes.add(code)
+            except ValueError:
+                # Invalid pattern, skip
+                pass
+
+    return sorted(list(status_codes))
+
+
 def parse_args():
     """Parse command-line arguments"""
     parser = argparse.ArgumentParser(
@@ -148,7 +223,7 @@ For more information, visit: https://github.com/yourusername/subdomain-scanner
     )
     parser.add_argument(
         '--filter-status',
-        help='Only show subdomains with specific HTTP status codes (comma-separated, e.g., 403,404)'
+        help='Only show subdomains with specific HTTP status codes. Supports wildcards: "403,404" or "4*" (all 4xx) or "40*" (400-409)'
     )
     parser.add_argument(
         '--require-cname',
@@ -478,10 +553,10 @@ def main():
         if args.limit and len(domains) > args.limit:
             domains = domains[:args.limit]
 
-    # Parse filter parameters
+    # Parse filter parameters with wildcard support
     filter_status_codes = None
     if args.filter_status:
-        filter_status_codes = [int(code.strip()) for code in args.filter_status.split(',')]
+        filter_status_codes = parse_status_code_patterns(args.filter_status)
 
     # Scan domains
     try:
