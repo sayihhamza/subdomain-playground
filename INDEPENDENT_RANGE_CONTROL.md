@@ -6,18 +6,40 @@ You now have **independent control** over the row ranges for:
 - **Cell 7 (Preview)** - Shows filtered dataset for manual review
 - **Cell 8 (Scan)** - Runs the actual deep scan
 
+## 🔑 Key Architecture
+
+**Both Cell 7 and Cell 8 work from the SAME base dataset** (`df_base_filtered` from Cell 6). This is critical:
+
+```
+Cell 6: Loads CSV → Filters → Sorts by Est Monthly Page Views → Creates df_base_filtered
+                                                                        ↓
+                                        ┌──────────────────────────────┴───────────────────────────────┐
+                                        ↓                                                              ↓
+Cell 7: Select rows X-Y from df_base_filtered → Filter subdomains → PREVIEW
+Cell 8: Select rows A-B from df_base_filtered → Filter subdomains → SCAN
+```
+
+**What they share:**
+- Same source dataset (`df_base_filtered`)
+- Same sort order (Est Monthly Page Views, descending)
+
+**What's independent:**
+- Row range selection (Cell 7 uses `PREVIEW_START_ROW`/`PREVIEW_END_ROW`, Cell 8 uses `SCAN_START_ROW`/`SCAN_END_ROW`)
+- Each cell filters for subdomains independently
+- No cross-contamination between preview and scan
+
 ---
 
 ## 📋 Configuration Variables
 
 ### Cell 6: Base Filter & Sort
 ```python
-START_ROW = 1      # Not used anymore (kept for compatibility)
-END_ROW = 100      # Not used anymore (kept for compatibility)
 SORT_BY = 'Est Monthly Page Views'  # Sorting column
 ```
 
-**Purpose:** Loads and filters the full dataset, creates `df_base_filtered`
+**Purpose:** Loads, filters, and sorts the complete dataset, creates `df_base_filtered`
+
+**No row selection** - Cell 6 just prepares the base dataset for Cell 7 and Cell 8 to use
 
 ---
 
@@ -28,6 +50,11 @@ PREVIEW_END_ROW = 100       # Last row to PREVIEW
 ```
 
 **Purpose:** Controls what rows are **displayed** for manual review
+
+**Process:**
+1. Selects rows `PREVIEW_START_ROW` to `PREVIEW_END_ROW` from `df_base_filtered`
+2. Filters to keep only subdomains (3+ parts)
+3. Displays results with row numbers
 
 **Example Usage:**
 ```python
@@ -53,6 +80,11 @@ SCAN_END_ROW = 100       # Last row to SCAN
 ```
 
 **Purpose:** Controls what rows are **scanned** by the deep scanner
+
+**Process:**
+1. Selects rows `SCAN_START_ROW` to `SCAN_END_ROW` from `df_base_filtered`
+2. Filters to keep only subdomains (3+ parts)
+3. Saves to file and runs scanner
 
 **Example Usage:**
 ```python
