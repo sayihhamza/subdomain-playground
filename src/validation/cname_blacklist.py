@@ -146,8 +146,8 @@ class CNAMEBlacklist:
             # Not blacklisted, keep it
             filtered.append(subdomain)
 
-        if blacklisted_count > 0:
-            self.logger.info(f"Filtered {blacklisted_count} subdomains with blacklisted CNAMEs")
+        # if blacklisted_count > 0:
+        #     self.logger.info(f"Filtered {blacklisted_count} subdomains with blacklisted CNAMEs")
 
         return filtered
 
