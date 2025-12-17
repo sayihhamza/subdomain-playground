@@ -1,0 +1,49 @@
+# Fixed Cell 1 Code for Kaggle
+
+Replace Cell 1 with this code:
+
+```python
+%%bash
+# Don't use set -euo pipefail to avoid directory issues
+WORKDIR="/kaggle/working"
+PROJECT_DIR="$WORKDIR/subdomain-playground"
+
+echo "=========================================="
+echo "Cloning Project from GitHub"
+echo "=========================================="
+
+# Ensure working directory exists
+mkdir -p "$WORKDIR"
+
+# Remove existing copy if it exists
+if [ -d "$PROJECT_DIR" ]; then
+    echo "Removing existing copy..."
+    rm -rf "$PROJECT_DIR"
+fi
+
+# Clone fresh copy
+cd "$WORKDIR"
+git clone --depth 1 https://github.com/sayihhamza/subdomain-playground.git subdomain-playground
+
+# Verify clone succeeded
+if [ ! -d "$PROJECT_DIR" ]; then
+    echo "✗ Clone failed!"
+    exit 1
+fi
+
+cd "$PROJECT_DIR"
+
+echo ""
+echo "✓ Project cloned successfully!"
+echo ""
+echo "Key files:"
+ls -lh scan.py hybrid_scan.py kaggle_scan.py run.sh 2>/dev/null || echo "Files will be available after clone completes"
+```
+
+**Key Changes:**
+1. Removed `set -euo pipefail` (causes issues with directory changes)
+2. Hard-coded `/kaggle/working` path
+3. Added `mkdir -p` to ensure directory exists
+4. Changed to `$WORKDIR` before cloning
+5. Added verification step
+6. Added `2>/dev/null` to ls to suppress errors
