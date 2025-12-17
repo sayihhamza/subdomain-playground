@@ -1,0 +1,30 @@
+[
+  {
+    "subdomain": "shop-ca.iqair.com",
+    "cname": "iqair-canada.myshopify.com",
+    "cname_chain": [
+      "iqair-canada.myshopify.com",
+      "shops.myshopify.com"
+    ],
+    "cname_chain_count": 2,
+    "final_cname_target": "shops.myshopify.com",
+    "dangling_cname": false,
+    "vulnerable_cname_hop": "shopify",
+    "takeover_risk": null,
+    "a_records": [
+      "23.227.38.74"
+    ],
+    "aaaa_records": [],
+    "ns_records": [],
+    "dns_response_code": "NOERROR",
+    "dns_ttl": 7200,
+    "http_status": 403,
+    "http_title": "403 Forbidden",
+    "provider": "Shopify",
+    "provider_detection_method": "cname_pattern",
+    "ip_confirmed": false,
+    "confidence_score": 0,
+    "risk_level": null,
+    "domain": "shop-ca.iqair.com"
+  }
+]

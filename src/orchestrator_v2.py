@@ -23,6 +23,7 @@ from .models.subdomain import Subdomain
 from .pipeline.subdomain_enum_v2 import MultiToolEnumerator
 from .validation.dns_validator import DNSValidator
 from .validation.wildcard_detector import WildcardDetector
+from .validation.cname_blacklist import CNAMEBlacklist
 from .identification.provider_detector import ProviderDetector
 from .pipeline.http_validator import HTTPValidator
 from .pipeline.takeover_detector import TakeoverDetector
@@ -63,6 +64,9 @@ class OrchestratorV2:
             num_tests=5
         )
 
+        # Initialize CNAME blacklist filter
+        self.cname_blacklist = CNAMEBlacklist()
+
         self.provider_detector = ProviderDetector(
             config_dir=config.config_dir,
             providers_config=config.providers
@@ -78,6 +82,47 @@ class OrchestratorV2:
 
         self.confidence_scorer = ConfidenceScorer()
 
+    def _is_subdomain(self, domain: str) -> bool:
+        """
+        Check if the input is already a subdomain (not a root domain)
+
+        Args:
+            domain: Domain to check
+
+        Returns:
+            True if this is a subdomain, False if root domain
+
+        Examples:
+            shop.example.com -> True (subdomain)
+            example.com -> False (root)
+            www.example.com -> True (subdomain)
+            example.co.uk -> False (root with ccTLD)
+        """
+        # Remove trailing dot
+        domain = domain.rstrip('.')
+
+        # Count dots
+        parts = domain.split('.')
+
+        # Common second-level TLDs (co.uk, com.au, etc.)
+        second_level_tlds = {
+            'co.uk', 'com.au', 'co.jp', 'co.nz', 'co.za',
+            'com.br', 'com.mx', 'com.ar', 'org.uk', 'ac.uk'
+        }
+
+        # Check if has second-level TLD
+        if len(parts) >= 3:
+            potential_sld = f"{parts[-2]}.{parts[-1]}"
+            if potential_sld in second_level_tlds:
+                # example.co.uk has 3 parts but is root
+                # shop.example.co.uk has 4 parts and is subdomain
+                return len(parts) > 3
+
+        # Standard TLD (.com, .org, .net, etc.)
+        # example.com has 2 parts -> root
+        # shop.example.com has 3+ parts -> subdomain
+        return len(parts) > 2
+
     def _print_live_subdomain(self, subdomain: Subdomain):
         """
         Print a live subdomain result as it's discovered
@@ -86,7 +131,7 @@ class OrchestratorV2:
             subdomain: Subdomain object with scan results
         """
         # Status based on HTTP status code and vulnerability
-        if subdomain.vulnerable:
+        if subdomain.is_vulnerable:
             status = "🔴 VULN"
         elif subdomain.http_status:
             if subdomain.http_status < 300:
@@ -111,11 +156,11 @@ class OrchestratorV2:
 
         # Build info string
         info_parts = []
-        if subdomain.ip_address:
-            info_parts.append(f"IP:{subdomain.ip_address[:15]}")
+        if subdomain.a_records:
+            info_parts.append(f"IP:{subdomain.a_records[0][:15]}")
         if subdomain.ip_confirmed:
             info_parts.append("✓CloudIP")
-        if subdomain.vulnerable:
+        if subdomain.is_vulnerable:
             info_parts.append("⚠️TAKEOVER")
 
         info_display = " ".join(info_parts) if info_parts else "-"
@@ -157,14 +202,39 @@ class OrchestratorV2:
         self.logger.info("[PHASE 1/6] Subdomain Enumeration")
         self.logger.info("-" * 60)
 
-        # Using 'full' mode for maximum coverage (all tools enabled)
-        # Available modes: 'passive' (faster, 90-95%) or 'full' (slower, 98-99%)
-        enumerated = self.enumerator.enumerate(domain, mode=mode)
-        results['phase_results']['enumeration'] = {
-            'count': len(enumerated),
-            'subdomains': [s.subdomain for s in enumerated]
-        }
-        self.logger.info(f"Found {len(enumerated)} subdomains")
+        # Check if input is already a subdomain (e.g., from CSV dataset)
+        # If so, skip enumeration and scan it directly
+        if self._is_subdomain(domain):
+            self.logger.info(f"Input is already a subdomain: {domain}")
+            self.logger.info("Skipping subdomain enumeration, scanning directly")
+
+            # Extract parent domain for Subdomain object
+            parts = domain.split('.')
+            parent_domain = '.'.join(parts[-2:])  # Get last 2 parts (example.com)
+
+            # Create single Subdomain object for direct scan
+            enumerated = [Subdomain(
+                subdomain=domain,
+                parent_domain=parent_domain,
+                source='direct_input'
+            )]
+            results['phase_results']['enumeration'] = {
+                'count': 1,
+                'subdomains': [domain],
+                'skipped': True,
+                'reason': 'Input is subdomain, enumeration skipped'
+            }
+        else:
+            # Normal enumeration for root domains
+            # Using 'full' mode for maximum coverage (all tools enabled)
+            # Available modes: 'passive' (faster, 90-95%) or 'full' (slower, 98-99%)
+            enumerated = self.enumerator.enumerate(domain, mode=mode)
+            results['phase_results']['enumeration'] = {
+                'count': len(enumerated),
+                'subdomains': [s.subdomain for s in enumerated],
+                'skipped': False
+            }
+            self.logger.info(f"Found {len(enumerated)} subdomains")
 
         if not enumerated:
             self.logger.debug("No subdomains found, stopping scan")
@@ -203,6 +273,23 @@ class OrchestratorV2:
 
         if not filtered:
             self.logger.warning("All subdomains filtered as wildcards")
+            return results
+
+        # PHASE 3.5: CNAME Blacklist Filtering
+        # Filter out CNAMEs that cannot be taken over (verification records, active platforms, etc.)
+        before_cname_filter = len(filtered)
+        filtered = self.cname_blacklist.filter_subdomains(filtered, verbose=False)
+        cname_blacklisted = before_cname_filter - len(filtered)
+
+        if cname_blacklisted > 0:
+            self.logger.info(f"Filtered {cname_blacklisted} subdomains with blacklisted CNAMEs")
+            results['phase_results']['cname_blacklist'] = {
+                'filtered': cname_blacklisted,
+                'percentage': cname_blacklisted / before_cname_filter * 100
+            }
+
+        if not filtered:
+            self.logger.warning("All subdomains filtered by CNAME blacklist")
             return results
 
         # PHASE 4: Cloud Provider Identification (IP + CNAME + Headers)

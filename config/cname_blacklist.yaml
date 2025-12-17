@@ -1,0 +1,78 @@
+# CNAME Blacklist - Patterns that indicate untakeable subdomains
+# These CNAMEs cannot be taken over and should be excluded from results
+
+# Shopify verification records (cannot be claimed)
+shopify_verification:
+  - "myshopify.verification"
+  - "verification.shopify.com"
+  - "shopify-verification"
+
+# Cloudflare authentication/verification records
+# These require access to Cloudflare DNS management to add TXT/CNAME records
+cloudflare_verification:
+  - "verify.cloudflare.com"
+  - "_cf-custom-hostname"
+  - "cloudflare-verify"
+  - "shopify_verification_"  # Shopify verification via Cloudflare DNS (requires TXT record)
+  - "_acme-challenge"  # SSL certificate validation (requires TXT record)
+  - "_dnsauth"  # DNS authentication records
+  - "ssl-validation"  # SSL validation subdomains
+  - "domain-verification"  # Generic domain verification
+
+# AWS verification records
+aws_verification:
+  - "acm-validation"
+  - "amazonses.com"
+  - "awsapps.com"
+  - "aws-verification"
+
+# Google verification records
+google_verification:
+  - "google-site-verification"
+  - "googlehosted.l.googleusercontent.com"
+  - "ghs.googlehosted.com"
+
+# Other CDN/Platform verification
+other_verification:
+  - "fastly-verify"
+  - "akamai-verify"
+  - "cdn-verification"
+  - "ssl-verification"
+  - "domain-verification"
+
+# Active, maintained platforms (low takeover risk)
+active_platforms:
+  - "wpengine.com"  # WordPress hosting - actively maintained
+  - "pantheonsite.io"  # Pantheon hosting - actively maintained
+  - "netlify.app"  # Netlify - actively maintained
+  - "vercel.app"  # Vercel - actively maintained
+  - "herokuapp.com"  # Heroku - actively maintained
+  - "azurewebsites.net"  # Azure - actively maintained
+
+# Internal/Private records
+internal_records:
+  - "internal."
+  - "private."
+  - "corp."
+  - "vpn."
+  - "intranet."
+
+# Email authentication records (not takeover targets)
+email_records:
+  - "spf."
+  - "dkim."
+  - "dmarc."
+  - "_domainkey"
+  - "mail.protection.outlook.com"
+  - "mailgun.org"
+  - "sendgrid.net"
+
+# Platform-specific verification that requires provider access
+# These show "Needs setup" or verification pages but cannot be claimed
+platform_verification:
+  - "shopify_verification"  # Any subdomain with shopify_verification in name
+  - "_verification"  # Generic verification subdomains
+  - "verification-"  # Verification prefix
+  - "verify-"  # Verify prefix
+  - "validate-"  # Validate prefix
+  - "confirm-"  # Confirmation prefix

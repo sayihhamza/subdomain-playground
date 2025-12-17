@@ -164,6 +164,28 @@ class HTTPXParser:
                 if pattern in body_lower:
                     return evidence
 
+        # Verification/setup page indicators (requires DNS/provider access)
+        # These look like "Needs setup" pages but cannot be taken over without DNS access
+        verification_patterns = [
+            "checking dns records",
+            "add these new dns records",
+            "shopify_verification_",
+            "needs setup",
+            "domain verification",
+            "verify your domain",
+            "txt record",
+            "dns management",
+            "cloudflare dns",
+            "update dns",
+            "log in to cloudflare",
+            "add dns record",
+            "domain setup",
+        ]
+
+        for verify_pattern in verification_patterns:
+            if verify_pattern in body_lower:
+                return "FALSE POSITIVE - Verification page (requires DNS/Cloudflare access)"
+
         # False positive indicators (login pages, active sites)
         false_positive_patterns = [
             "login",
