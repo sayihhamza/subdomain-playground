@@ -15,14 +15,13 @@ Cell 6: Loads CSV → Sorts by Est Monthly Page Views → Creates df_base_filter
                                                                 ↓
                         ┌───────────────────────────────────────┴────────────────────────────────────────┐
                         ↓                                                                                ↓
-Cell 7: Select rows X-Y → Apply filters → PREVIEW              Cell 8: Select rows A-B → Apply filters → SCAN
+Cell 7: Select rows X-Y → Apply filters → PREVIEW              Cell 8: Select rows A-B → NO FILTERS → SCAN
         (PREVIEW_START_ROW to PREVIEW_END_ROW)                         (SCAN_START_ROW to SCAN_END_ROW)
 
-        Filters:                                                        Filters:
-        1. Is_Shopify == 'Yes'                                         1. Is_Shopify == 'Yes'
-        2. Exclude *.myshopify.com                                     2. Exclude *.myshopify.com
-        3. Exclude HTTP 200/429                                        3. Exclude HTTP 200/429
-        4. Subdomain only (3+ parts)                                   4. Subdomain only (3+ parts)
+        Filters (for preview only):                                    Filters (applied by scan.py):
+        1. Is_Shopify == 'Yes'                                         1. --require-cname-contains shopify
+        2. Exclude *.myshopify.com                                     2. --filter-status 3*,4*,5*
+        3. Exclude HTTP 200/429
 ```
 
 **What they share:**
@@ -31,7 +30,8 @@ Cell 7: Select rows X-Y → Apply filters → PREVIEW              Cell 8: Selec
 
 **What's independent:**
 - Row range selection (Cell 7 uses `PREVIEW_START_ROW`/`PREVIEW_END_ROW`, Cell 8 uses `SCAN_START_ROW`/`SCAN_END_ROW`)
-- Each cell applies filters independently
+- Cell 7 applies filters for preview
+- Cell 8 applies NO filters (scan.py handles filtering)
 - No cross-contamination between preview and scan
 
 ---
@@ -59,11 +59,10 @@ PREVIEW_END_ROW = 100       # Last row to PREVIEW
 
 **Process:**
 1. Selects rows `PREVIEW_START_ROW` to `PREVIEW_END_ROW` from `df_base_filtered` (sorted, unfiltered)
-2. Applies filters:
+2. Applies filters (for preview display only):
    - Is_Shopify == 'Yes'
    - Exclude *.myshopify.com
    - Exclude HTTP 200/429
-   - Subdomain only (3+ parts)
 3. Displays results with row numbers
 
 **Example Usage:**
@@ -93,12 +92,12 @@ SCAN_END_ROW = 100       # Last row to SCAN
 
 **Process:**
 1. Selects rows `SCAN_START_ROW` to `SCAN_END_ROW` from `df_base_filtered` (sorted, unfiltered)
-2. Applies filters (same as Cell 7):
-   - Is_Shopify == 'Yes'
-   - Exclude *.myshopify.com
-   - Exclude HTTP 200/429
-   - Subdomain only (3+ parts)
-3. Saves to file and runs scanner
+2. **NO filters applied** - saves ALL domains from range to file
+3. Runs scanner with filters:
+   - `--require-cname-contains shopify` (checks CNAME chain)
+   - `--filter-status 3*,4*,5*` (only 3xx/4xx/5xx statuses)
+
+**Why no pre-filtering?** The scanner (`scan.py`) already has sophisticated filtering that checks CNAME chains and HTTP status. Pre-filtering would miss domains that should be scanned.
 
 **Example Usage:**
 ```python
