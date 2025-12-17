@@ -28,7 +28,11 @@ tools:
     timeout: 600
   dnsx:
     enabled: true
+    # Custom DNS resolvers (leave empty for default: Google, Cloudflare, OpenDNS)
+    # Default: ['8.8.8.8', '1.1.1.1', '208.67.222.222']
     resolvers: []
+    # Example custom resolvers:
+    # resolvers: ['8.8.8.8', '8.8.4.4', '1.1.1.1', '1.0.0.1']
   httpx:
     enabled: true
     follow_redirects: true

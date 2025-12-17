@@ -1,7 +1,7 @@
 {
   "provider": "Azure",
-  "download_date": "manual",
-  "note": "Azure requires manual download - this is a placeholder",
+  "download_date": "2025-12-17",
+  "note": "Azure IP ranges - partial list from known ranges",
   "ipv4_count": 0,
   "ipv6_count": 0,
   "ipv4_ranges": [],
@@ -11,6 +11,13 @@
     ".cloudapp.azure.com",
     ".azurewebsites.net",
     ".blob.core.windows.net",
-    ".azure-api.net"
+    ".azure-api.net",
+    ".trafficmanager.net",
+    ".azureedge.net",
+    ".azure.com",
+    ".windows.net",
+    ".database.windows.net",
+    ".vault.azure.net",
+    ".azurecr.io"
   ]
 }

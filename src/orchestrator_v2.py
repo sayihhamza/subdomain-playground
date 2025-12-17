@@ -56,8 +56,14 @@ class OrchestratorV2:
         # Use MultiToolEnumerator for maximum coverage
         self.enumerator = MultiToolEnumerator()
 
+        # Get custom DNS resolvers from config (if specified)
+        dns_resolvers = config.config.get('tools', {}).get('dnsx', {}).get('resolvers', None)
+        if dns_resolvers and len(dns_resolvers) > 0:
+            self.logger.info(f"Using custom DNS resolvers: {', '.join(dns_resolvers)}")
+
         self.dns_validator = DNSValidator(
-            dnsx_path=config.tool_paths['dnsx']
+            dnsx_path=config.tool_paths['dnsx'],
+            resolvers=dns_resolvers if dns_resolvers else None
         )
 
         self.wildcard_detector = WildcardDetector(
@@ -282,7 +288,7 @@ class OrchestratorV2:
         cname_blacklisted = before_cname_filter - len(filtered)
 
         if cname_blacklisted > 0:
-            self.logger.info(f"Filtered {cname_blacklisted} subdomains with blacklisted CNAMEs")
+            # self.logger.info(f"Filtered {cname_blacklisted} subdomains with blacklisted CNAMEs")
             results['phase_results']['cname_blacklist'] = {
                 'filtered': cname_blacklisted,
                 'percentage': cname_blacklisted / before_cname_filter * 100

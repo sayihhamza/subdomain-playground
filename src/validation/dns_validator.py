@@ -22,16 +22,18 @@ class DNSValidator:
     Properly validates which subdomains actually resolve before HTTP probing.
     """
 
-    def __init__(self, dnsx_path: Path, use_dnspython_fallback: bool = True):
+    def __init__(self, dnsx_path: Path, use_dnspython_fallback: bool = True, resolvers: Optional[List[str]] = None):
         """
         Initialize DNS validator
 
         Args:
             dnsx_path: Path to dnsx binary
             use_dnspython_fallback: Use dnspython if dnsx fails
+            resolvers: List of DNS resolvers (default: ['8.8.8.8', '1.1.1.1', '208.67.222.222'])
         """
         self.dnsx_path = dnsx_path
         self.use_dnspython_fallback = use_dnspython_fallback
+        self.resolvers = resolvers or ['8.8.8.8', '1.1.1.1', '208.67.222.222']  # Google, Cloudflare, OpenDNS
         self.logger = logging.getLogger(__name__)
 
     def validate_batch(self, subdomains: List[Subdomain], chunk_size: int = 1000) -> List[Subdomain]:
@@ -115,6 +117,7 @@ class DNSValidator:
         try:
             # Run dnsx to resolve DNS records with custom resolvers
             # Using optimized flags for Kaggle performance
+            resolver_string = ','.join(self.resolvers)
             cmd = [
                 str(self.dnsx_path),
                 '-l', temp_file,
@@ -124,7 +127,7 @@ class DNSValidator:
                 '-resp',         # Include full DNS response
                 '-retry', '3',   # Increased from 2 to 3 for reliability
                 '-threads', '100',  # Parallel DNS resolution
-                '-r', '8.8.8.8,1.1.1.1',  # Google, Cloudflare
+                '-r', resolver_string,  # Custom DNS resolvers (configurable)
                 '-silent'
             ]
 
