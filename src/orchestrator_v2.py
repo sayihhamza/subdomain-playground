@@ -15,6 +15,7 @@ Old (WRONG) workflow: subfinder → DNS → HTTP → Verify
 New (CORRECT) workflow: subfinder → DNS Validation → Wildcard Filter → HTTP → Provider ID → Verify
 """
 import logging
+import time
 from pathlib import Path
 from typing import List, Dict, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -200,10 +201,15 @@ class OrchestratorV2:
             'all_subdomains': [],
             'cloud_hosted': [],
             'vulnerable': [],
-            'statistics': {}
+            'statistics': {},
+            'timing': {
+                'scan_start': time.time(),
+                'phases': {}
+            }
         }
 
         # PHASE 1: Subdomain Enumeration
+        phase1_start = time.time()
         self.logger.info("")
         self.logger.info("[PHASE 1/6] Subdomain Enumeration")
         self.logger.info("-" * 60)
@@ -242,11 +248,19 @@ class OrchestratorV2:
             }
             self.logger.info(f"Found {len(enumerated)} subdomains")
 
+        phase1_elapsed = time.time() - phase1_start
+        results['timing']['phases']['enumeration'] = {
+            'duration_seconds': phase1_elapsed,
+            'duration_formatted': f"{int(phase1_elapsed // 60)}m {int(phase1_elapsed % 60)}s"
+        }
+        self.logger.info(f"Phase 1 completed in {int(phase1_elapsed // 60)}m {int(phase1_elapsed % 60)}s")
+
         if not enumerated:
             self.logger.debug("No subdomains found, stopping scan")
             return results
 
         # PHASE 2: DNS Validation (CRITICAL MISSING STEP)
+        phase2_start = time.time()
         self.logger.info("")
         self.logger.info("[PHASE 2/6] DNS Validation")
         self.logger.info("-" * 60)
@@ -259,11 +273,19 @@ class OrchestratorV2:
         self.logger.info(f"Validated {len(validated)}/{len(enumerated)} subdomains")
         self.logger.info(f"NXDOMAIN detected: {results['phase_results']['dns_validation']['nxdomain_count']}")
 
+        phase2_elapsed = time.time() - phase2_start
+        results['timing']['phases']['dns_validation'] = {
+            'duration_seconds': phase2_elapsed,
+            'duration_formatted': f"{int(phase2_elapsed // 60)}m {int(phase2_elapsed % 60)}s"
+        }
+        self.logger.info(f"Phase 2 completed in {int(phase2_elapsed // 60)}m {int(phase2_elapsed % 60)}s")
+
         if not validated:
             self.logger.warning("No valid DNS records found, stopping scan")
             return results
 
         # PHASE 3: Wildcard Filtering (CRITICAL MISSING STEP)
+        phase3_start = time.time()
         self.logger.info("")
         self.logger.info("[PHASE 3/6] Wildcard Filtering")
         self.logger.info("-" * 60)
@@ -276,6 +298,13 @@ class OrchestratorV2:
         }
         self.logger.info(f"Filtered {wildcards_removed} wildcard matches")
         self.logger.info(f"Remaining: {len(filtered)} subdomains")
+
+        phase3_elapsed = time.time() - phase3_start
+        results['timing']['phases']['wildcard_filtering'] = {
+            'duration_seconds': phase3_elapsed,
+            'duration_formatted': f"{int(phase3_elapsed // 60)}m {int(phase3_elapsed % 60)}s"
+        }
+        self.logger.info(f"Phase 3 completed in {int(phase3_elapsed // 60)}m {int(phase3_elapsed % 60)}s")
 
         if not filtered:
             self.logger.warning("All subdomains filtered as wildcards")
@@ -299,6 +328,7 @@ class OrchestratorV2:
             return results
 
         # PHASE 4: Cloud Provider Identification (IP + CNAME + Headers)
+        phase4_start = time.time()
         self.logger.info("")
         self.logger.info("[PHASE 4/6] Cloud Provider Identification")
         self.logger.info("-" * 60)
@@ -345,7 +375,15 @@ class OrchestratorV2:
         for provider, stats in results['phase_results']['provider_identification']['providers'].items():
             self.logger.info(f"  {provider}: {stats['count']} (IP confirmed: {stats['ip_confirmed']})")
 
+        phase4_elapsed = time.time() - phase4_start
+        results['timing']['phases']['provider_identification'] = {
+            'duration_seconds': phase4_elapsed,
+            'duration_formatted': f"{int(phase4_elapsed // 60)}m {int(phase4_elapsed % 60)}s"
+        }
+        self.logger.info(f"Phase 4 completed in {int(phase4_elapsed // 60)}m {int(phase4_elapsed % 60)}s")
+
         # PHASE 5: HTTP Validation
+        phase5_start = time.time()
         self.logger.info("")
         self.logger.info("[PHASE 5/6] HTTP Validation")
         self.logger.info("-" * 60)
@@ -365,6 +403,13 @@ class OrchestratorV2:
 
         self.logger.info(f"HTTP validated {len(http_validated)} subdomains")
 
+        phase5_elapsed = time.time() - phase5_start
+        results['timing']['phases']['http_validation'] = {
+            'duration_seconds': phase5_elapsed,
+            'duration_formatted': f"{int(phase5_elapsed // 60)}m {int(phase5_elapsed % 60)}s"
+        }
+        self.logger.info(f"Phase 5 completed in {int(phase5_elapsed // 60)}m {int(phase5_elapsed % 60)}s")
+
         # Print live results table (only if not in quiet mode)
         if http_validated and not quiet_mode:
             print("\n" + "=" * 110)
@@ -374,6 +419,7 @@ class OrchestratorV2:
                 self._print_live_subdomain(subdomain)
 
         # PHASE 6: Vulnerability Verification
+        phase6_start = time.time()
         self.logger.info("")
         self.logger.info("[PHASE 6/6] Vulnerability Verification")
         self.logger.info("-" * 60)
@@ -427,10 +473,22 @@ class OrchestratorV2:
             vulnerable = []
             self.logger.info("No cloud-hosted subdomains to verify")
 
+        phase6_elapsed = time.time() - phase6_start
+        results['timing']['phases']['verification'] = {
+            'duration_seconds': phase6_elapsed,
+            'duration_formatted': f"{int(phase6_elapsed // 60)}m {int(phase6_elapsed % 60)}s"
+        }
+        self.logger.info(f"Phase 6 completed in {int(phase6_elapsed // 60)}m {int(phase6_elapsed % 60)}s")
+
         # Compile final results
         results['all_subdomains'] = [s.to_dict() for s in http_validated]
         results['cloud_hosted'] = [s.to_dict() for s in cloud_with_http]
         results['vulnerable'] = [s.to_dict() for s in vulnerable]
+
+        # Calculate total scan time
+        total_elapsed = time.time() - results['timing']['scan_start']
+        results['timing']['total_duration_seconds'] = total_elapsed
+        results['timing']['total_duration_formatted'] = f"{int(total_elapsed // 60)}m {int(total_elapsed % 60)}s"
 
         # Statistics
         results['statistics'] = {
@@ -449,6 +507,13 @@ class OrchestratorV2:
         self.logger.info("=" * 60)
         self.logger.info("Scan Complete")
         self.logger.info("=" * 60)
+        self.logger.info(f"Total time: {results['timing']['total_duration_formatted']}")
+        self.logger.info("")
+        self.logger.info("Phase Breakdown:")
+        for phase_name, phase_timing in results['timing']['phases'].items():
+            phase_label = phase_name.replace('_', ' ').title()
+            self.logger.info(f"  {phase_label}: {phase_timing['duration_formatted']}")
+        self.logger.info("")
         self.logger.info(f"Total subdomains found: {results['statistics']['total_found']}")
         self.logger.info(f"Cloud-hosted: {results['statistics']['cloud_hosted']}")
         self.logger.info(f"Vulnerable: {results['statistics']['vulnerable']}")
