@@ -11,35 +11,41 @@ You now have **independent control** over the row ranges for:
 **Both Cell 7 and Cell 8 work from the SAME base dataset** (`df_base_filtered` from Cell 6). This is critical:
 
 ```
-Cell 6: Loads CSV → Filters → Sorts by Est Monthly Page Views → Creates df_base_filtered
-                                                                        ↓
-                                        ┌──────────────────────────────┴───────────────────────────────┐
-                                        ↓                                                              ↓
-Cell 7: Select rows X-Y from df_base_filtered → Filter subdomains → PREVIEW
-Cell 8: Select rows A-B from df_base_filtered → Filter subdomains → SCAN
+Cell 6: Loads CSV → Sorts by Est Monthly Page Views → Creates df_base_filtered (NO FILTERS)
+                                                                ↓
+                        ┌───────────────────────────────────────┴────────────────────────────────────────┐
+                        ↓                                                                                ↓
+Cell 7: Select rows X-Y → Apply filters → PREVIEW              Cell 8: Select rows A-B → Apply filters → SCAN
+        (PREVIEW_START_ROW to PREVIEW_END_ROW)                         (SCAN_START_ROW to SCAN_END_ROW)
+
+        Filters:                                                        Filters:
+        1. Is_Shopify == 'Yes'                                         1. Is_Shopify == 'Yes'
+        2. Exclude *.myshopify.com                                     2. Exclude *.myshopify.com
+        3. Exclude HTTP 200/429                                        3. Exclude HTTP 200/429
+        4. Subdomain only (3+ parts)                                   4. Subdomain only (3+ parts)
 ```
 
 **What they share:**
-- Same source dataset (`df_base_filtered`)
+- Same source dataset (`df_base_filtered` - sorted, unfiltered)
 - Same sort order (Est Monthly Page Views, descending)
 
 **What's independent:**
 - Row range selection (Cell 7 uses `PREVIEW_START_ROW`/`PREVIEW_END_ROW`, Cell 8 uses `SCAN_START_ROW`/`SCAN_END_ROW`)
-- Each cell filters for subdomains independently
+- Each cell applies filters independently
 - No cross-contamination between preview and scan
 
 ---
 
 ## 📋 Configuration Variables
 
-### Cell 6: Base Filter & Sort
+### Cell 6: Load & Sort (NO FILTERS)
 ```python
 SORT_BY = 'Est Monthly Page Views'  # Sorting column
 ```
 
-**Purpose:** Loads, filters, and sorts the complete dataset, creates `df_base_filtered`
+**Purpose:** Loads and sorts the complete dataset, creates `df_base_filtered`
 
-**No row selection** - Cell 6 just prepares the base dataset for Cell 7 and Cell 8 to use
+**Important:** Cell 6 does NO filtering - it only loads and sorts. This ensures Cell 7 and Cell 8 work from the exact same base dataset and apply their own filters independently.
 
 ---
 
@@ -52,8 +58,12 @@ PREVIEW_END_ROW = 100       # Last row to PREVIEW
 **Purpose:** Controls what rows are **displayed** for manual review
 
 **Process:**
-1. Selects rows `PREVIEW_START_ROW` to `PREVIEW_END_ROW` from `df_base_filtered`
-2. Filters to keep only subdomains (3+ parts)
+1. Selects rows `PREVIEW_START_ROW` to `PREVIEW_END_ROW` from `df_base_filtered` (sorted, unfiltered)
+2. Applies filters:
+   - Is_Shopify == 'Yes'
+   - Exclude *.myshopify.com
+   - Exclude HTTP 200/429
+   - Subdomain only (3+ parts)
 3. Displays results with row numbers
 
 **Example Usage:**
@@ -82,8 +92,12 @@ SCAN_END_ROW = 100       # Last row to SCAN
 **Purpose:** Controls what rows are **scanned** by the deep scanner
 
 **Process:**
-1. Selects rows `SCAN_START_ROW` to `SCAN_END_ROW` from `df_base_filtered`
-2. Filters to keep only subdomains (3+ parts)
+1. Selects rows `SCAN_START_ROW` to `SCAN_END_ROW` from `df_base_filtered` (sorted, unfiltered)
+2. Applies filters (same as Cell 7):
+   - Is_Shopify == 'Yes'
+   - Exclude *.myshopify.com
+   - Exclude HTTP 200/429
+   - Subdomain only (3+ parts)
 3. Saves to file and runs scanner
 
 **Example Usage:**
