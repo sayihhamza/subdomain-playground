@@ -3,6 +3,7 @@
 Subdomain Takeover Scanner - Clean CLI Interface
 
 Simple, professional command-line interface for subdomain vulnerability scanning.
+Supports automatic resume on restart (for Kaggle/long-running scans).
 
 Usage:
     python scan.py <domain> [options]
@@ -13,6 +14,11 @@ Examples:
     python scan.py example.com --output results/
     python scan.py example.com --json
     python scan.py -l domains.txt --workers 10
+
+Resume functionality:
+    - Progress is saved to scan_progress.json after each domain
+    - Results are saved to all_results.json incrementally
+    - On restart, already-scanned domains are automatically skipped
 """
 import sys
 import argparse
@@ -43,6 +49,175 @@ def setup_logging(verbose: bool = False):
         format='%(message)s',
         handlers=[logging.StreamHandler()]
     )
+
+
+def load_existing_results(filepath: Path) -> list:
+    """Load existing results from JSON file"""
+    if filepath.exists():
+        try:
+            with open(filepath, 'r') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, IOError):
+            return []
+    return []
+
+
+# =============================================================================
+# RESUME FUNCTIONALITY
+# =============================================================================
+
+PROGRESS_FILE = Path("scan_progress.json")
+RESULTS_FILE = Path("all_results.json")
+
+
+def load_progress() -> dict:
+    """
+    Load scan progress from file.
+
+    Returns:
+        dict with 'scanned_domains' set and 'last_row' counter
+    """
+    progress = {
+        'scanned_domains': set(),
+        'last_row': 0,
+        'total_scanned': 0
+    }
+
+    if PROGRESS_FILE.exists():
+        try:
+            with open(PROGRESS_FILE, 'r') as f:
+                data = json.load(f)
+                progress['last_row'] = data.get('last_row', 0)
+                progress['total_scanned'] = data.get('total_scanned', 0)
+                # Load scanned domains list if available
+                progress['scanned_domains'] = set(data.get('scanned_domains', []))
+        except (json.JSONDecodeError, IOError):
+            pass
+
+    # Also load scanned subdomains from results file to build complete set
+    if RESULTS_FILE.exists():
+        try:
+            with open(RESULTS_FILE, 'r') as f:
+                results = json.load(f)
+                for r in results:
+                    subdomain = r.get('subdomain', '')
+                    if subdomain:
+                        # Extract parent domain from subdomain
+                        parts = subdomain.split('.')
+                        if len(parts) >= 2:
+                            parent = '.'.join(parts[-2:])
+                            progress['scanned_domains'].add(parent)
+        except (json.JSONDecodeError, IOError):
+            pass
+
+    return progress
+
+
+def save_progress(scanned_domains: set, last_row: int):
+    """
+    Save scan progress to file.
+
+    Args:
+        scanned_domains: Set of domains that have been scanned
+        last_row: Last row index processed
+    """
+    # Only save domain count to keep file small (domains can be inferred from results)
+    data = {
+        'last_row': last_row,
+        'total_scanned': len(scanned_domains),
+        'updated': datetime.now().isoformat(),
+        # Save list of scanned domains for accurate resume
+        'scanned_domains': list(scanned_domains)
+    }
+
+    with open(PROGRESS_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+
+def calculate_risk_and_confidence(http_status: int, provider: str, cname: str) -> tuple:
+    """
+    Calculate risk level and confidence score based on HTTP status, provider, and CNAME.
+    """
+    is_shopify = provider == "Shopify" or (cname and "shopify" in cname.lower())
+
+    if http_status in (404, 500):
+        if is_shopify:
+            return "high", 90
+        return "medium", 60
+
+    if http_status == 403:
+        if is_shopify:
+            return "high", 85
+        return "low", 40
+
+    if http_status == 409:
+        if is_shopify:
+            return "high", 85
+        return "medium", 60
+
+    if http_status in (301, 302, 307, 308):
+        if is_shopify:
+            return "medium", 70
+        return "low", 40
+
+    return "low", 30
+
+
+def save_result_to_all_results(subdomain_data: dict, results_file: Path = RESULTS_FILE):
+    """
+    Append a single result to all_results.json (incremental save).
+
+    Args:
+        subdomain_data: Dict with subdomain scan result
+        results_file: Path to results JSON file
+    """
+    # Load existing results
+    existing = []
+    existing_subdomains = set()
+
+    if results_file.exists():
+        try:
+            with open(results_file, 'r') as f:
+                existing = json.load(f)
+                existing_subdomains = {r.get('subdomain') for r in existing}
+        except (json.JSONDecodeError, IOError):
+            pass
+
+    # Only add if not duplicate
+    if subdomain_data.get('subdomain') not in existing_subdomains:
+        existing.append(subdomain_data)
+
+        # Save back
+        with open(results_file, 'w') as f:
+            json.dump(existing, f, indent=2)
+
+        return True
+    return False
+
+
+def save_results_incremental(new_results: list, filepath: Path):
+    """
+    Save results incrementally - merge with existing results avoiding duplicates
+    """
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+
+    # Load existing results
+    existing = load_existing_results(filepath)
+    existing_subdomains = {r.get('subdomain') for r in existing}
+
+    # Add only new results (avoid duplicates)
+    added = 0
+    for result in new_results:
+        if result.get('subdomain') not in existing_subdomains:
+            existing.append(result)
+            existing_subdomains.add(result.get('subdomain'))
+            added += 1
+
+    # Save merged results
+    with open(filepath, 'w') as f:
+        json.dump(existing, f, indent=2)
+
+    return len(existing), added
 
 
 def parse_status_code_patterns(pattern_str: str) -> list:
@@ -259,6 +434,29 @@ For more information, visit: https://github.com/yourusername/subdomain-scanner
         '--limit',
         type=int,
         help='Limit number of domains to scan (e.g., --limit 100 for first 100 domains)'
+    )
+
+    # Resume options
+    parser.add_argument(
+        '--resume',
+        action='store_true',
+        default=True,
+        help='Resume from last scan position (default: enabled)'
+    )
+    parser.add_argument(
+        '--no-resume',
+        action='store_true',
+        help='Start fresh, ignore previous progress'
+    )
+    parser.add_argument(
+        '--progress-file',
+        default='scan_progress.json',
+        help='Path to progress file (default: scan_progress.json)'
+    )
+    parser.add_argument(
+        '--results-file',
+        default='all_results.json',
+        help='Path to results file (default: all_results.json)'
     )
 
     # Verbosity
@@ -553,6 +751,44 @@ def main():
         if args.limit and len(domains) > args.limit:
             domains = domains[:args.limit]
 
+    # ==========================================================================
+    # RESUME FUNCTIONALITY
+    # ==========================================================================
+    global PROGRESS_FILE, RESULTS_FILE
+    PROGRESS_FILE = Path(args.progress_file)
+    RESULTS_FILE = Path(args.results_file)
+
+    scanned_domains = set()
+    original_count = len(domains)
+
+    if args.resume and not args.no_resume:
+        # Load previous progress
+        progress = load_progress()
+        scanned_domains = progress['scanned_domains']
+
+        if scanned_domains:
+            # Filter out already-scanned domains
+            domains_before = len(domains)
+            domains = [d for d in domains if d not in scanned_domains]
+
+            skipped = domains_before - len(domains)
+            if skipped > 0 and not args.quiet:
+                print(f"\n🔄 RESUME MODE ACTIVE")
+                print(f"   Previously scanned: {len(scanned_domains)} domains")
+                print(f"   Skipping: {skipped} already-scanned domains")
+                print(f"   Remaining: {len(domains)} domains to scan")
+
+                if len(domains) == 0:
+                    print(f"\n✅ All domains already scanned! Nothing to do.")
+                    print(f"   Use --no-resume to start fresh.\n")
+                    return 0
+    elif args.no_resume and not args.quiet:
+        print(f"\n🆕 Starting fresh scan (--no-resume)")
+        # Clear progress files if starting fresh
+        if PROGRESS_FILE.exists():
+            PROGRESS_FILE.unlink()
+        # Note: We don't clear RESULTS_FILE - user should do that manually if needed
+
     # Parse filter parameters with wildcard support
     filter_status_codes = None
     if args.filter_status:
@@ -578,11 +814,17 @@ def main():
 
         # Save and print results
         output_dir = Path(args.output)
+        takeover_file = output_dir / 'shopify_takeover_candidates.json'
 
-        # Collect all takeover candidates
-        all_takeover_candidates = []
+        # Batch for incremental saving (save every N domains)
+        SAVE_BATCH_SIZE = 10
+        batch_candidates = []
+        domains_processed = 0
 
         for results in all_results:
+            domains_processed += 1
+            current_domain = results.get('domain', '')
+
             # Provider filter already applied during scan (no need to filter again)
 
             # Save results silently
@@ -593,8 +835,27 @@ def main():
                 for sub in results['all_subdomains']:
                     cname = sub.get('cname', '')
                     status = sub.get('http_status')
-                    if cname and ('myshopify.com' in cname.lower() or 'shopify' in cname.lower()) and status in [403, 404]:
-                        all_takeover_candidates.append({
+                    # Save ALL results with Shopify CNAME and 3xx/4xx/5xx status
+                    if cname and ('myshopify.com' in cname.lower() or 'shopify' in cname.lower()) and status and (300 <= status < 600):
+                        # Calculate risk and confidence
+                        risk_level, confidence_score = calculate_risk_and_confidence(
+                            status, sub.get('provider', ''), cname
+                        )
+
+                        result_data = {
+                            'subdomain': sub.get('subdomain'),
+                            'http_status': status,
+                            'provider': sub.get('provider', '-'),
+                            'cname': cname,
+                            'risk_level': sub.get('risk_level') or risk_level,
+                            'confidence_score': sub.get('confidence_score') or confidence_score
+                        }
+
+                        # Save to all_results.json immediately (for resume)
+                        save_result_to_all_results(result_data, RESULTS_FILE)
+
+                        # Also collect for batch save to takeover file
+                        batch_candidates.append({
                             'subdomain': sub.get('subdomain'),
                             'cname': cname,
                             'cname_chain': sub.get('cname_chain', []),
@@ -618,22 +879,45 @@ def main():
                             'domain': results['domain']
                         })
 
-        # Save takeover candidates to summary file
-        if all_takeover_candidates:
-            takeover_file = output_dir / 'shopify_takeover_candidates.json'
-            takeover_file.parent.mkdir(parents=True, exist_ok=True)
-            with open(takeover_file, 'w') as f:
-                json.dump(all_takeover_candidates, f, indent=2)
-            print(f"\n🎯 Found {len(all_takeover_candidates)} Shopify takeover candidates")
+            # Track this domain as scanned
+            if current_domain:
+                scanned_domains.add(current_domain)
+
+            # Save progress after each domain (for resume)
+            save_progress(scanned_domains, domains_processed)
+
+            # Save incrementally every SAVE_BATCH_SIZE domains
+            if domains_processed % SAVE_BATCH_SIZE == 0 and batch_candidates:
+                save_results_incremental(batch_candidates, takeover_file)
+                batch_candidates = []  # Clear batch after saving
+
+        # Save any remaining candidates
+        if batch_candidates:
+            save_results_incremental(batch_candidates, takeover_file)
+
+        # Print final summary
+        final_results = load_existing_results(takeover_file)
+        if final_results:
+            print(f"\n🎯 Found {len(final_results)} Shopify takeover candidates")
             print(f"📄 Saved to: {takeover_file}\n")
 
         return 0
 
     except KeyboardInterrupt:
-        print("\n\nScan interrupted by user", file=sys.stderr)
+        print("\n\n⚠️  Scan interrupted by user", file=sys.stderr)
+        # Save progress before exiting
+        if scanned_domains:
+            save_progress(scanned_domains, len(scanned_domains))
+            print(f"💾 Progress saved: {len(scanned_domains)} domains scanned", file=sys.stderr)
+            print(f"   Run again to resume from where you left off.\n", file=sys.stderr)
         return 130
     except Exception as e:
-        print(f"\nError during scan: {str(e)}", file=sys.stderr)
+        print(f"\n❌ Error during scan: {str(e)}", file=sys.stderr)
+        # Save progress before exiting on error
+        if scanned_domains:
+            save_progress(scanned_domains, len(scanned_domains))
+            print(f"💾 Progress saved: {len(scanned_domains)} domains scanned", file=sys.stderr)
+            print(f"   Run again to resume from where you left off.\n", file=sys.stderr)
         if args.verbose:
             import traceback
             traceback.print_exc()
