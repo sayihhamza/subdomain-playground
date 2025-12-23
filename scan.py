@@ -75,7 +75,7 @@ def load_progress() -> dict:
     Load scan progress from file.
 
     Returns:
-        dict with 'scanned_domains' set and 'last_row' counter
+        dict with 'last_row' (0-indexed row to resume FROM) and 'scanned_domains' set
     """
     progress = {
         'scanned_domains': set(),
@@ -91,22 +91,6 @@ def load_progress() -> dict:
                 progress['total_scanned'] = data.get('total_scanned', 0)
                 # Load scanned domains list if available
                 progress['scanned_domains'] = set(data.get('scanned_domains', []))
-        except (json.JSONDecodeError, IOError):
-            pass
-
-    # Also load scanned subdomains from results file to build complete set
-    if RESULTS_FILE.exists():
-        try:
-            with open(RESULTS_FILE, 'r') as f:
-                results = json.load(f)
-                for r in results:
-                    subdomain = r.get('subdomain', '')
-                    if subdomain:
-                        # Extract parent domain from subdomain
-                        parts = subdomain.split('.')
-                        if len(parts) >= 2:
-                            parent = '.'.join(parts[-2:])
-                            progress['scanned_domains'].add(parent)
         except (json.JSONDecodeError, IOError):
             pass
 
@@ -752,7 +736,7 @@ def main():
             domains = domains[:args.limit]
 
     # ==========================================================================
-    # RESUME FUNCTIONALITY
+    # RESUME FUNCTIONALITY - Row-based resume for accurate continuation
     # ==========================================================================
     global PROGRESS_FILE, RESULTS_FILE
     PROGRESS_FILE = Path(args.progress_file)
@@ -760,28 +744,35 @@ def main():
 
     scanned_domains = set()
     original_count = len(domains)
+    start_row = 0  # 0-indexed starting position
 
     if args.resume and not args.no_resume:
         # Load previous progress
         progress = load_progress()
+        last_row = progress['last_row']
         scanned_domains = progress['scanned_domains']
 
-        if scanned_domains:
-            # Filter out already-scanned domains
-            domains_before = len(domains)
-            domains = [d for d in domains if d not in scanned_domains]
+        if last_row > 0:
+            # Resume from the row AFTER last_row (last_row is the last completed row)
+            start_row = last_row
+            skipped = min(start_row, len(domains))
 
-            skipped = domains_before - len(domains)
-            if skipped > 0 and not args.quiet:
+            if not args.quiet:
                 print(f"\n🔄 RESUME MODE ACTIVE")
-                print(f"   Previously scanned: {len(scanned_domains)} domains")
-                print(f"   Skipping: {skipped} already-scanned domains")
-                print(f"   Remaining: {len(domains)} domains to scan")
+                print(f"   Last completed row: {last_row}")
+                print(f"   Total domains in list: {original_count}")
+                print(f"   Skipping first {skipped} domains (already scanned)")
+                print(f"   Resuming from row: {start_row + 1}")
+                print(f"   Remaining: {max(0, original_count - start_row)} domains to scan")
 
-                if len(domains) == 0:
-                    print(f"\n✅ All domains already scanned! Nothing to do.")
-                    print(f"   Use --no-resume to start fresh.\n")
-                    return 0
+            if start_row >= len(domains):
+                print(f"\n✅ All {original_count} domains already scanned! Nothing to do.")
+                print(f"   Use --no-resume to start fresh.\n")
+                return 0
+
+            # Slice domains to start from resume point
+            domains = domains[start_row:]
+
     elif args.no_resume and not args.quiet:
         print(f"\n🆕 Starting fresh scan (--no-resume)")
         # Clear progress files if starting fresh
@@ -884,7 +875,9 @@ def main():
                 scanned_domains.add(current_domain)
 
             # Save progress after each domain (for resume)
-            save_progress(scanned_domains, domains_processed)
+            # Use absolute row number: start_row + domains_processed
+            absolute_row = start_row + domains_processed
+            save_progress(scanned_domains, absolute_row)
 
             # Save incrementally every SAVE_BATCH_SIZE domains
             if domains_processed % SAVE_BATCH_SIZE == 0 and batch_candidates:
@@ -906,18 +899,21 @@ def main():
     except KeyboardInterrupt:
         print("\n\n⚠️  Scan interrupted by user", file=sys.stderr)
         # Save progress before exiting
-        if scanned_domains:
-            save_progress(scanned_domains, len(scanned_domains))
-            print(f"💾 Progress saved: {len(scanned_domains)} domains scanned", file=sys.stderr)
-            print(f"   Run again to resume from where you left off.\n", file=sys.stderr)
+        # Calculate absolute row: start_row + domains_processed
+        absolute_row = start_row + domains_processed
+        if absolute_row > 0:
+            save_progress(scanned_domains, absolute_row)
+            print(f"💾 Progress saved at row {absolute_row} ({domains_processed} scanned this session)", file=sys.stderr)
+            print(f"   Run again to resume from row {absolute_row + 1}.\n", file=sys.stderr)
         return 130
     except Exception as e:
         print(f"\n❌ Error during scan: {str(e)}", file=sys.stderr)
         # Save progress before exiting on error
-        if scanned_domains:
-            save_progress(scanned_domains, len(scanned_domains))
-            print(f"💾 Progress saved: {len(scanned_domains)} domains scanned", file=sys.stderr)
-            print(f"   Run again to resume from where you left off.\n", file=sys.stderr)
+        absolute_row = start_row + domains_processed
+        if absolute_row > 0:
+            save_progress(scanned_domains, absolute_row)
+            print(f"💾 Progress saved at row {absolute_row} ({domains_processed} scanned this session)", file=sys.stderr)
+            print(f"   Run again to resume from row {absolute_row + 1}.\n", file=sys.stderr)
         if args.verbose:
             import traceback
             traceback.print_exc()
