@@ -48,13 +48,25 @@ def parse_scan_line(line: str) -> dict | None:
     """
     Parse a single scan result line from the text file.
     Format: SUBDOMAIN  STATUS  PROVIDER  CNAME  EVIDENCE  MESSAGE
+
+    Also handles Kaggle notebook log format with timestamp prefix:
+    Example: "381.3s	1318	account.womensbest.com    403    Shopify    ..."
     """
     # Skip non-data lines
     if not line.strip():
         return None
-    if line.startswith('=') or line.startswith('[') or line.startswith('SUBDOMAIN'):
-        return None
     if 'complete |' in line or 'Rate:' in line:
+        return None
+    if 'go: downloading' in line or 'github.com/' in line:
+        return None
+
+    # Strip Kaggle timestamp prefix if present (format: "123.4s\t1234\t")
+    kaggle_prefix_match = re.match(r'^\d+\.\d+s\s+\d+\s+', line)
+    if kaggle_prefix_match:
+        line = line[kaggle_prefix_match.end():]
+
+    # Skip header/separator lines (after stripping prefix)
+    if line.startswith('=') or line.startswith('[') or line.startswith('SUBDOMAIN'):
         return None
 
     # Split by multiple spaces (table format)
@@ -102,29 +114,44 @@ def parse_scan_line(line: str) -> dict | None:
     }
 
 
-def convert_scan_file(input_file: str, output_file: str):
+def convert_scan_file(input_file: str, output_file: str, merge: bool = True):
     """
     Convert the scan text file to JSON format.
+    If merge=True, merge with existing results in output_file.
     """
     results = []
-    seen_subdomains = set()  # Avoid duplicates
+    seen_subdomains = set()
+
+    # Load existing results if merging
+    if merge:
+        try:
+            with open(output_file, 'r', encoding='utf-8') as f:
+                existing = json.load(f)
+                print(f"Loaded {len(existing)} existing entries from {output_file}")
+                for entry in existing:
+                    seen_subdomains.add(entry['subdomain'])
+                    results.append(entry)
+        except FileNotFoundError:
+            print(f"No existing {output_file} found, creating new file")
 
     print(f"Reading {input_file}...")
 
+    new_count = 0
     with open(input_file, 'r', encoding='utf-8', errors='ignore') as f:
         for line_num, line in enumerate(f, 1):
             result = parse_scan_line(line)
             if result and result['subdomain'] not in seen_subdomains:
                 results.append(result)
                 seen_subdomains.add(result['subdomain'])
+                new_count += 1
 
             if line_num % 10000 == 0:
-                print(f"  Processed {line_num} lines, found {len(results)} results...")
+                print(f"  Processed {line_num} lines...")
 
-    print(f"\nTotal results: {len(results)}")
+    print(f"\nAdded {new_count} new entries (total: {len(results)})")
 
-    # Sort by confidence score (highest first) then by subdomain
-    results.sort(key=lambda x: (-x['confidence_score'], x['subdomain']))
+    # Sort by authority_score (if present) then confidence_score (highest first)
+    results.sort(key=lambda x: (-x.get('authority_score', 0), -x['confidence_score'], x['subdomain']))
 
     print(f"Writing to {output_file}...")
     with open(output_file, 'w', encoding='utf-8') as f:

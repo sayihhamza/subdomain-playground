@@ -28087,5 +28087,1541 @@
     "risk_level": "high",
     "confidence_score": 85,
     "authority_score": 25
+  },
+  {
+    "subdomain": "eu.islesurfandsup.com",
+    "http_status": 500,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 90
+  },
+  {
+    "subdomain": "eu.typhur.com",
+    "http_status": 500,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 90
+  },
+  {
+    "subdomain": "hydrogen.carved.com",
+    "http_status": 500,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 90
+  },
+  {
+    "subdomain": "uat.culturekings.com.au",
+    "http_status": 500,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 90
+  },
+  {
+    "subdomain": "uk.typhur.com",
+    "http_status": 500,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 90
+  },
+  {
+    "subdomain": "www.proclipusa.com",
+    "http_status": 500,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 90
+  },
+  {
+    "subdomain": "accesorios.www.gelblaster.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "accessories.www.gelblaster.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "account.ballerinafarm.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "account.gunskins.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "account.honeyflow.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "account.kpopalbums.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "account.weaverleathersupply.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "account.womensbest.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "afiliacionusa.vianney.com.mx",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "vianney-usa.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "apiendpoint.canvasprints.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "archive.jackrogersusa.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "asked.www.gelblaster.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "au.bkbeauty.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "au.floydrose.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "au.frostbuddy.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "autodiscover.overthemoon.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "b2b.jackrogersusa.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "jackrogersb2b.myshopify.c - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "b2b.sabrent.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "b2b.womensbest.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "b2btest.barebonesliving.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "barebones-b2b.myshopify.c - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ca.floydrose.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ca.ora.organic",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ca.thechristmaslightemporium.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "canada.doublewoodsupplements.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ch.gelblaster.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "checkout.uat.pcaskin.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "de.purelei.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "de.taotronics.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "energy.poponveneers.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "es.shopkarolg.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "eu.bobbinbikes.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "bobbin-bicycles.myshopify - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "eu.coolcabanas.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "eu.lancaster.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "exwaccount.waterboxaquariums.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "fois.www.gelblaster.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "fr.baffin.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "baffin-inc.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ftp.carved.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ftp.chosenfoods.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "chosen-foods.myshopify.co - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ftp.gnomonwatches.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ftp.leminimacaron.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "le-mini-macaron-2.myshopi - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ftp.progressivedesk.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "ftp.shop.laboiteny.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "la-boite-nyc.myshopify.co - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "fundraising.yates.com.au",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "yatesfundraising.myshopif - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "grimmjack.sharkrobot.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "hydrogen.cymbiotika.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "cymbiotika-testing.myshop - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "il.floydrose.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "import.waterboxaquariums.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "info.noellesalon.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "intl.soludos.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "is.unagiscooters.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "it.womensbest.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "l.ora.organic",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "ora-organic.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "learn.waterboxaquariums.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "lp.joyorganics.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "mail.dogtuff.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "mail.viscosoft.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "milanondemand.p448.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "mx.floydrose.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "my.mudhole.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "new.stasherbag.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "new14.discmania.net",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "nz.floydrose.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "payment.birchbox.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "piihka7sscwt.reduceeveryday.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "reduce-everyday.myshopify - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "pl.womensbest.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "pos.blendtec.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "poweredbotanics.khadinatural.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "preproduction.themusicemporium.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "pro.waterdrop.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "prodeal.ibex.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "returns.oldgringoboots.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "schools.insectlore.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "se.unagiscooters.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "secure.eu.lespecs.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop-au.unagiscooters.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "unagi-scooters-au.myshopi - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop-ca.unagiscooters.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "unagi-scooters-ca.myshopi - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop-eu.unagiscooters.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "unagi-scooters-eu.myshopi - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop-uk.unagiscooters.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "unagi-scooters-uk.myshopi - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.apm.mc",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "apm-uk.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.cncpts.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.fabercastell.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.friendsnyc.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.genmobile.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.gldn.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.lennylarry.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.prxperformance.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.sktools.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.suzannesomers.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "suzanne-somers.myshopify. - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shop.thechivery.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "ssl.shopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shopartgraphic.fabercastell.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shopifysandbox.mudhole.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shopsea.foresightsports.com",
+    "http_status": 409,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "shoptest.atbbq.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "all-things-barbecue-3710. - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "staging.princesspolly.com.au",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "princess-polly-au-dev.mys - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "staging.tentree.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "store.christomlin.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "christomlin.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "store.underoutfit.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "test.kaged.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "tss.sharkrobot.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "uk.edenrobe.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "uk.purelei.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "uk.taotronics.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "us.otaa.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "otaa-us.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "usa.coolcabanas.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "usa.mylee.co.uk",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "usa.womensbest.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "vip.ferkosfinejewelry.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "webmail.overthemoon.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "whm.overthemoon.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "wholesale.grip6.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "grip6-wholesale.myshopify - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "wholesale.ninashoes.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "nina-shoes-store.account. - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "wholesale.tatsoul.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "wholesale.vosshelmetsusa.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.asia.renpho.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.au.lespecs.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.b2b-au.yokkao.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.breakingt.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.ca.bond-touch.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "bond-touch-canada.myshopi - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.ca.riskracing.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.canada.smashitsports.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.cawholesale.smashitsports.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "smashitsportscanada.mysho - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.cn.liforme.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.de.riskracing.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.es.riskracing.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.eu.bond-touch.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "bond-touch-eu2.myshopify. - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.eu.riskracing.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.eu.seavees.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.faworldentertainment.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.fr.renpho.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.fr.riskracing.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.freshlypicked.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.intl.lespecs.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.it.riskracing.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.it.yokkao.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.kerrits.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.mrbeast.store",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "mr-beast-2.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.organablis.ogee.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.poppyplaytime.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "playtime-co-shop.myshopif - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.qualitycage.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "quality-cage-crafters.mys - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.shop-generalstore.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.shop.cuadra.com.mx",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.shop.sonoranspice.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.shopnicekicks.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "nice-kicks.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.staging.humann.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.teckwrapcraft.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.therunningcentre.com.au",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.tienda.elglobo.com.mx",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.uk.bond-touch.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "bond-touch-unitedkingdom. - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.uk.seavees.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.us.initioparfums.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "www.vapetyson.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "tyson-20.myshopify.com - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "zinc.cymbiotika.com",
+    "http_status": 403,
+    "provider": "Shopify",
+    "cname": "cymbiotika-testing.myshop - (2 hops)",
+    "risk_level": "high",
+    "confidence_score": 85
+  },
+  {
+    "subdomain": "au.positivegrid.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "ca-checkout.july.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "campusstore.integrativenutrition.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "checkout.hk.vedix.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "checkout.om.vedix.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "checkout.ph.vedix.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "dev-humidor.bovedainc.com",
+    "http_status": 302,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "fr.typhur.com",
+    "http_status": 302,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "hydrogen.tonybianco.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "shop.tonybianco.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "shopify-aux.dev.cloudsvc.laura.ca",
+    "http_status": 302,
+    "provider": "AWS",
+    "cname": "shopify-aux.dev.cloudsvc. - (2 hops)",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "shopify-aux.prd.cloudsvc.laura.ca",
+    "http_status": 302,
+    "provider": "AWS",
+    "cname": "shopify-aux.prd.cloudsvc. - (2 hops)",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "shopify-staging.bistromd.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "staging.tonybianco.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "store.trysnow.com",
+    "http_status": 301,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "www-stg.toraya-group.co.jp",
+    "http_status": 302,
+    "provider": "Shopify",
+    "cname": "shops.myshopify.com",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "www.tumblerware.com",
+    "http_status": 302,
+    "provider": "Shopify",
+    "cname": "tumblerandco.myshopify.co - (2 hops)",
+    "risk_level": "medium",
+    "confidence_score": 70
+  },
+  {
+    "subdomain": "wholesale.outdoorsolarstore.com",
+    "http_status": 409,
+    "provider": "-",
+    "cname": "outdoorsolarstore.wholesale. -",
+    "risk_level": "medium",
+    "confidence_score": 60
+  },
+  {
+    "subdomain": "apmdemo.apm.mc",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.apm.mc (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "boutique.bikes.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "shop.bikes.com (3 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "de-www.palladiumboots.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.palladiumboots.com - (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "dev.plantsexpress.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.plantsexpress.com - (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "ftp.brunomagli.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.brunomagli.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "images.eastlandshoe.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.eastlandshoe.com - (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "images.spadepot.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.spadepot.com (3 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "irobot.skinit.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.skinit.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "m.journelle.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.journelle.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "store.scentsationals.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.scentsationals.com - (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "testen.waterdrop.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.waterdrop.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "webmail.brunomagli.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.brunomagli.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "whm.brunomagli.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "www.brunomagli.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "www.au.bond-touch.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "au.bond-touch.com (3 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "www.blog.apt2b.com",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "blog.apt2b.com (2 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
+  },
+  {
+    "subdomain": "www.fundraising.yates.com.au",
+    "http_status": 403,
+    "provider": "-",
+    "cname": "fundraising.yates.com.au - (3 hops)",
+    "risk_level": "low",
+    "confidence_score": 40
   }
 ]
